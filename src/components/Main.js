@@ -43,7 +43,7 @@ function Main() {
               signerAddress,
               nickname,
               secondNickname,
-              link,
+              // link,
               amount
             })  
             .then((response) => {
@@ -83,8 +83,8 @@ function Main() {
         {errorMessage ? <p style={{color: 'red', fontSize: '14px', marginTop: '-12px'}}>{errorMessage}</p> : null}
         <label >Enter Chess.com nickname of your opponent</label>
         <input placeholder=''  type="text" value={secondNickname} onChange={(e) => setSecondNickname(e.target.value)} />
-        <label >Enter Chess.com game link</label>
-        <input placeholder='Link here'  type="text"  onChange={(e) => setLink(e.target.value)} />
+        {/* <label >Enter Chess.com game link</label>
+        <input placeholder='Link here'  type="text"  onChange={(e) => setLink(e.target.value)} /> */}
         <label>Enter Amount of Bet</label>
         <input 
          placeholder='0.000 Ether' name='currency-field' value={amount}

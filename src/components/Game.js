@@ -61,11 +61,11 @@ function Game() {
 
   useEffect(() =>  {
     axios.get(`http://localhost:8080/join/${id}`).then(response => {
-      const {signerAddress, nickname, secondNickname, link, amount, secondSigner} = response.data;
+      const {signerAddress, nickname, secondNickname,  amount, secondSigner} = response.data;
       setFirstAddress(signerAddress);
       setSecondAddress(secondSigner);
       setFirstNick(nickname);
-      setMatchLink(link);
+      // setMatchLink(link);
       setSecondNick(secondNickname);
       setBetAmount(amount);
       setUrl(`http://localhost:3000/join/${id}`);
@@ -81,6 +81,7 @@ function Game() {
             <label>Generated link:</label>
             <input value={url} type='text' />
         </div>
+        <input placeholder='Enter game link' onChange={(e) => setMatchLink(e.target.value)} />
         <span className='start-btn' onClick={onCheck}>CHECK RESULT</span>
     </div>
   )
