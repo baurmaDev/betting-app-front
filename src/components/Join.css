@@ -1,0 +1,17 @@
+.join-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 150px;
+}
+.input-container{
+    display: flex;
+    justify-content: center;
+}
+.join-input  input{
+    width: 200px;
+    height: 30px;
+    background: transparent;
+    color: aliceblue;
+
+}

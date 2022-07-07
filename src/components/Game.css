@@ -1,0 +1,13 @@
+.game-link{
+    display: flex;
+    flex-direction: column;
+    color: aliceblue;
+}
+.game-link input{
+    margin-top: 8px;
+    background: transparent;
+    color: aliceblue;
+}
+.game-link button{
+    margin-top: 40px;
+}
