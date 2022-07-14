@@ -5,6 +5,7 @@ import './Main.css';
 import abi from '../utils/Bet.json';
 // import { Navigate } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
+import Load from './Load';
 
 
 function Main() {
@@ -22,6 +23,8 @@ function Main() {
 
   
   const sendBet = async () => {
+    console.log(amount);
+  
     try{
         const {ethereum} = window;
 
@@ -39,7 +42,7 @@ function Main() {
           await messageTxn.wait();
           console.log("Betted!");
           axios
-            .post("http://localhost:8080/create-game", {
+            .post("http://localhost:8080/api/create-game", {
               signerAddress,
               nickname,
               secondNickname,
@@ -92,7 +95,8 @@ function Main() {
          />
       </form>
       <span className='start-btn' style={{marginTop: `${errorMessage ? '100px' : '260px'}`}} onClick={onSubmit}>START</span>
-      { loading && loadAnimation()}
+      { loading && <Load />}
+      
     </div>
   )
 }
