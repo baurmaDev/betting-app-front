@@ -103,7 +103,7 @@ function Game() {
         setFirstNick(nickname);
         setSecondNick(secondNickname);
         setBetAmount(amount);
-        setUrl(`${BASE_URL}/join/${id}`);
+        setUrl(`https://chessbet.vercel.app/join/${id}`);
     }).catch(err => {
       console.log(err);
     })
