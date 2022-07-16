@@ -30,67 +30,71 @@ function Game() {
   
   
   const onCheck = () => {
+    axios.get(`${BASE_URL}/api/join/${roomId}`).then(response => {
+        if(response.data.secondSigner){
+          axios.get(`https://api.chess.com/pub/player/${firstNick}/games/archives`).then(response => {
+            axios.get(`${response.data.archives[response.data.archives.length - 1]}`).then(response => {
+              console.log(response.data.games[response.data.games.length - 1].url);
+              const game = response.data.games[response.data.games.length - 1].url === matchLink ? response.data.games[response.data.games.length - 1].url : false;
+              if(!game){
+                setErrorLink('The game is not over yet or the wrong link has been entered');
+              }
+              else{
+                setErrorLink('')
+              }
+              if((game.black.username === firstNick || game.white.username === firstNick) && (game.black.username === secondNick || game.white.username === secondNick)){
+                if(game.black.result != 'win'){
+                  console.log(game.white.username);
+                  if(game.white.username === firstNick){
+                    setWinnerName(firstNick);
+                    const winner = firstAddress;
+                    console.log(winner);
+                    const amount = betAmount * 2;
+                    axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
+                      winner,
+                      amount
+                    }).then(response => {
+                      setLoading(false);
+                      console.log(response.data);
+                      setErrorLink(response.data);
+                    }).catch(err => {
+                      console.log(err);
+                    })
+                  }else{
+                    setWinnerName(secondNick);
+                  }
+                }else{
+                  console.log("Winner: ", game.black.username);
+                  if(game.black.username === firstNick){
+                    const winner = firstAddress;
+                    setWinnerName(firstNick);
+                    console.log(winner);
+                    const amount = betAmount * 2;
+                    axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
+                      winner,
+                      amount
+                    }).then(response => {
+                      setLoading(false);
+                      setErrorLink(response.data);
+                      console.log(response.data);
+                    }).catch(err => {
+                      console.log(err);
+                    })
+                  }else{
+                    setWinnerName(secondNick);
+                  } 
+                }
+              }else{
+                setErrorLink("Not your match!!!")
+              }
+            })
+        })}else{
+          setErrorLink('The Second Player has not joined yet')
+        }
+    }).catch(err => {
+      console.log("Error request BASE_URL/api/join/roomID",err);
+    });
     
-    axios.get(`https://api.chess.com/pub/player/${firstNick}/games/archives`).then(response => {
-      axios.get(`${response.data.archives[response.data.archives.length - 1]}`).then(response => {
-        console.log(response.data.games[response.data.games.length - 1].url);
-        const game = response.data.games[response.data.games.length - 1].url === matchLink ? response.data.games[response.data.games.length - 1].url : false;
-        if(!game){
-          setErrorLink('The game is not over yet or the wrong link has been entered');
-        }
-        else{
-          setErrorLink('')
-        }
-        if((game.black.username === firstNick || game.white.username === firstNick) && (game.black.username === secondNick || game.white.username === secondNick)){
-          if(game.black.result != 'win'){
-            console.log(game.white.username);
-            if(game.white.username === firstNick){
-              setWinnerName(firstNick);
-              const winner = firstAddress;
-              console.log(winner);
-              const amount = betAmount * 2;
-              axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
-                winner,
-                amount
-              }).then(response => {
-                setLoading(false);
-                console.log(response.data);
-                setErrorLink(response.data);
-              }).catch(err => {
-                console.log(err);
-              })
-            }else{
-              setWinnerName(secondNick);
-            }
-          }else{
-            console.log("Winner: ", game.black.username);
-            if(game.black.username === firstNick){
-              const winner = firstAddress;
-              setWinnerName(firstNick);
-              console.log(winner);
-              const amount = betAmount * 2;
-              axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
-                winner,
-                amount
-              }).then(response => {
-                setLoading(false);
-                setErrorLink(response.data);
-                console.log(response.data);
-              }).catch(err => {
-                console.log(err);
-              })
-            }else{
-              setWinnerName(secondNick);
-            } 
-          }
-        }else{
-          setErrorLink("Not your match!!!")
-        }
-        
-        
-      })
-    })
-
   }
 
   useEffect(() =>  {
