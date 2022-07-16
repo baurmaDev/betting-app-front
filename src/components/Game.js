@@ -33,7 +33,8 @@ function Game() {
     
     axios.get(`https://api.chess.com/pub/player/${firstNick}/games/archives`).then(response => {
       axios.get(`${response.data.archives[response.data.archives.length - 1]}`).then(response => {
-        const game = response.data.games.find(item => item.url === matchLink);
+        console.log(response.data.games[response.data.games.length - 1].url);
+        const game = response.data.games[response.data.games.length - 1].url === matchLink ? response.data.games[response.data.games.length - 1].url : false;
         if(!game){
           setErrorLink('The game is not over yet or the wrong link has been entered');
         }
