@@ -1,12 +1,25 @@
 import './App.css';
 import {useState, useEffect} from 'react';
 import { Navigate } from "react-router-dom";
+import {isMobile} from 'react-device-detect';
+// import {WalletConnectProvider} from "@walletconnect/web3-provider";
+// import { providers } from "ethers";
 
 
 function App() {
 
   const [currentAccount, setCurrentAccount] = useState("");
+  // const mobileConnect = async() => {
+  //     const provider = new WalletConnectProvider({
+  //       infuraId: "27e484dcd9e3efcfd25a83a78777cdf1",
+  //     });
 
+  // //  Enable session (triggers QR Code modal)
+  //   await provider.enable();
+  //   const web3Provider = new providers.Web3Provider(provider);
+
+    
+  // }
   const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
     if (!ethereum) {

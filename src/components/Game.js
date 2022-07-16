@@ -5,6 +5,8 @@ import axios from 'axios';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DoneIcon from '@mui/icons-material/Done';
 import Load from './Load';
+import Modal from './Modal';
+import { BASE_URL } from './api';
 
 function Game() {
   const [roomId, setRoomId] = useState('');
@@ -34,82 +36,56 @@ function Game() {
         const game = response.data.games.find(item => item.url === matchLink);
         if(!game){
           setErrorLink('The game is not over yet or the wrong link has been entered');
-        }else{
+        }
+        else{
           setErrorLink('')
         }
-        if(game.black.result != 'win'){
-          console.log(game.white.username);
-          if(game.white.username === firstNick){
-            setWinnerName(firstNick);
-            const winner = firstAddress;
-            console.log(winner);
-            const amount = betAmount * 2;
-            axios.post(`http://localhost:8080/api/withdraw/${roomId}`, {
-              winner,
-              amount
-            }).then(response => {
-              setLoading(false);
-              console.log(response.data);
-              setErrorLink(response.data);
-            }).catch(err => {
-              console.log(err);
-            })
+        if((game.black.username === firstNick || game.white.username === firstNick) && (game.black.username === secondNick || game.white.username === secondNick)){
+          if(game.black.result != 'win'){
+            console.log(game.white.username);
+            if(game.white.username === firstNick){
+              setWinnerName(firstNick);
+              const winner = firstAddress;
+              console.log(winner);
+              const amount = betAmount * 2;
+              axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
+                winner,
+                amount
+              }).then(response => {
+                setLoading(false);
+                console.log(response.data);
+                setErrorLink(response.data);
+              }).catch(err => {
+                console.log(err);
+              })
+            }else{
+              setWinnerName(secondNick);
+            }
           }else{
-            alert("Get away!")
+            console.log("Winner: ", game.black.username);
+            if(game.black.username === firstNick){
+              const winner = firstAddress;
+              setWinnerName(firstNick);
+              console.log(winner);
+              const amount = betAmount * 2;
+              axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
+                winner,
+                amount
+              }).then(response => {
+                setLoading(false);
+                setErrorLink(response.data);
+                console.log(response.data);
+              }).catch(err => {
+                console.log(err);
+              })
+            }else{
+              setWinnerName(secondNick);
+            } 
           }
-          // if(game.white.username === secondNick){
-          //   setWinnerName(secondNick);
-          //   const winner = secondAddress;
-          //    console.log(winner);
-          //   const amount = betAmount * 2;
-          //   axios.post(`http://localhost:8080/api/withdraw/${roomId}`, {
-          //     winner,
-          //     amount
-          //   }).then(response => {
-          //     setLoading(false);
-          //     setErrorLink(response.data);
-          //     console.log(response.data);
-          //   }).catch(err => {
-          //     console.log(err);
-          //   })
-          // }
         }else{
-          console.log("Winner: ", game.black.username);
-          if(game.black.username === firstNick){
-            const winner = firstAddress;
-            setWinnerName(firstNick);
-             console.log(winner);
-            const amount = betAmount * 2;
-            axios.post(`http://localhost:8080/api/withdraw/${roomId}`, {
-              winner,
-              amount
-            }).then(response => {
-              setLoading(false);
-              setErrorLink(response.data);
-              console.log(response.data);
-            }).catch(err => {
-              console.log(err);
-            })
-          }else{
-            alert("Get away!")
-          }
-          // if(game.black.username === secondNick){
-          //   const winner = secondAddress;
-          //   setWinnerName(secondNick);
-          //   const amount = betAmount * 2;
-          //   console.log(winner);
-          //   axios.post(`http://localhost:8080/api/withdraw/${roomId}`, {
-          //     winner,
-          //     amount
-          //   }).then(response => {
-          //     setLoading(false);
-          //     setErrorLink(response.data);
-          //     console.log(response.data);
-          //   }).catch(err => {
-          //     console.log(err);
-          //   })
-          // }
+          setErrorLink("Not your match!!!")
         }
+        
         
       })
     })
@@ -118,7 +94,7 @@ function Game() {
 
   useEffect(() =>  {
     
-      axios.get(`http://localhost:8080/api/join/${id}`).then(response => {
+      axios.get(`${BASE_URL}/api/join/${id}`).then(response => {
         console.log("Get request!")
         const {_id,signerAddress, nickname, secondNickname,  amount,secondSigner} = response.data;
         setFirstAddress(signerAddress);
@@ -127,7 +103,7 @@ function Game() {
         setFirstNick(nickname);
         setSecondNick(secondNickname);
         setBetAmount(amount);
-        setUrl(`http://localhost:3000/join/${id}`);
+        setUrl(`${BASE_URL}/join/${id}`);
     }).catch(err => {
       console.log(err);
     })
@@ -146,9 +122,9 @@ function Game() {
     setMatchLink(e.target.value);
     setInput(e.target.value);
   }
-  return (
+  const app = () => (
     <div className='app-container' style={{width: '350px', height: '270px'}}>
-        <div className='game-link'>
+      <div className='game-link'>
           <div className='generated'>
             <label>Generated link:</label>
             <div style={{
@@ -171,9 +147,18 @@ function Game() {
           </div>
         </div>
         <span className='start-btn' onClick={onCheck} style={{marginTop: `${errorLink ? '10px' : ''}`}}>CHECK RESULT</span>
-        {/* {winnerName ? <h3 style={{color: 'whitesmoke'}}>Money sent to the winner: {winnerName}</h3> : ''} */}
+        {/* {winnerName ? <h3 style={{color: 'whitesmoke'}}>Winner is: {winnerName}</h3> : ''} */}
+
         {loading && <Load />}
     </div>
+  )
+  return (
+    // <div className='app-container' style={{width: '350px', height: '270px'}}>
+      <>
+      {winnerName ? <div className='app-container' style={{background: 'none'}}><Modal nick={winnerName} winner={winnerName === firstNick ? true : false} /> </div> : app()}
+      </>
+        
+    
   )
 }
 

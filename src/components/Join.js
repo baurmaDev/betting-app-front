@@ -5,7 +5,7 @@ import './Join.css'
 import abi from '../utils/Bet.json';
 import { useNavigate, useParams } from "react-router-dom";
 import Load from './Load';
-
+import { BASE_URL } from './api';
 
 
 function Join() {
@@ -16,6 +16,7 @@ function Join() {
   const [currentAccount, setCurrentAccount] = useState('');
   const contractAddress = '0x5CBc5735309FB70767f3820d9E561F1b74133473'
   const contractABI = abi.abi;
+  
   let navigate = useNavigate();
   const { roomID } = useParams();
   console.log('Room ID: ', roomID);
@@ -30,7 +31,7 @@ function Join() {
       }
       console.log("Before")
       const accounts = await ethereum.request({ method: "eth_accounts" });
-      console.log("After")
+      console.log("After", accounts)
       if(accounts.length !== 0){
         console.log("Authorized account: ", accounts[0]);
         setCurrentAccount(accounts[0]);
@@ -78,7 +79,7 @@ function Join() {
                 setLoading(true);
                 await messageTxn.wait();
                 console.log("Betted!", secondSigner); 
-                axios.post(`http://localhost:8080/api/lobby/${roomID}`, {
+                axios.post(`${BASE_URL}/api/lobby/${roomID}`, {
                     secondSigner
                 }).then(response => {
                     console.log(response);
@@ -102,7 +103,7 @@ function Join() {
   const onSubmit = (e) => {
     e.preventDefault();
     try{
-        axios.get(`http://localhost:8080/api/join/${roomID}`).then(response => {
+        axios.get(`${BASE_URL}/api/join/${roomID}`).then(response => {
             if(nickname === response.data.secondNickname){
               setErrorNick('');
                 sendBet(response.data.amount);

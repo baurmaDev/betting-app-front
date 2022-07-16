@@ -6,6 +6,7 @@ import abi from '../utils/Bet.json';
 // import { Navigate } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import Load from './Load';
+import { BASE_URL } from './api';
 
 
 function Main() {
@@ -42,7 +43,7 @@ function Main() {
           await messageTxn.wait();
           console.log("Betted!");
           axios
-            .post("http://localhost:8080/api/create-game", {
+            .post(`${BASE_URL}/api/create-game`, {
               signerAddress,
               nickname,
               secondNickname,
