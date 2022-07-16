@@ -35,13 +35,14 @@ function Game() {
           axios.get(`https://api.chess.com/pub/player/${firstNick}/games/archives`).then(response => {
             axios.get(`${response.data.archives[response.data.archives.length - 1]}`).then(response => {
               console.log(response.data.games[response.data.games.length - 1].url);
-              const game = response.data.games[response.data.games.length - 1].url === matchLink ? response.data.games[response.data.games.length - 1].url : false;
+              const game = response.data.games[response.data.games.length - 1].url === matchLink ? response.data.games[response.data.games.length - 1] : false;
               if(!game){
                 setErrorLink('The game is not over yet or the wrong link has been entered');
               }
               else{
                 setErrorLink('')
               }
+              console.log("game", game);
               if((game.black.username === firstNick || game.white.username === firstNick) && (game.black.username === secondNick || game.white.username === secondNick)){
                 if(game.black.result != 'win'){
                   console.log(game.white.username);
