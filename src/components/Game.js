@@ -26,18 +26,18 @@ const Game = () => {
   const {id, name} = state;
   const linkRef = useRef(null);
  
-  // const socket = io('https://chessbet.onrender.com',{
-  //   cors: {
-  //       origin: "https://chessbet.onrender.com",
-  //       credentials: true
-  //   }
-  // , transports: ['websocket']});
-  const socket = io('http://localhost:5000/',{
+  const socket = io('https://chessbet.onrender.com',{
     cors: {
-        origin: "http://localhost:5000",
+        origin: "https://chessbet.onrender.com",
         credentials: true
     }
   , transports: ['websocket']});
+  // const socket = io('http://localhost:5000/',{
+  //   cors: {
+  //       origin: "http://localhost:5000",
+  //       credentials: true
+  //   }
+  // , transports: ['websocket']});
   
   useEffect(() => {
     console.log("before socket emit")

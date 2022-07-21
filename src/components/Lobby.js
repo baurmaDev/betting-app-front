@@ -20,19 +20,19 @@ const Lobby = () => {
   const {state} = useLocation();
   const {id, name} = state;
   
-  const socket = io('http://localhost:5000/',{
-    cors: {
-        origin: "http://localhost:5000",
-        credentials: true
-    }
-  , transports: ['websocket']});
-
-  // const socket = io('https://chessbet.onrender.com',{
+  // const socket = io('http://localhost:5000/',{
   //   cors: {
-  //       origin: "https://chessbet.onrender.com",
+  //       origin: "http://localhost:5000",
   //       credentials: true
   //   }
   // , transports: ['websocket']});
+
+  const socket = io('https://chessbet.onrender.com',{
+    cors: {
+        origin: "https://chessbet.onrender.com",
+        credentials: true
+    }
+  , transports: ['websocket']});
   
   useEffect(() => {
     console.log("before socket emit")
