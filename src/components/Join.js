@@ -10,7 +10,7 @@ import { localhost } from './localhost';
 
 
 function Join() {
-  const [nickname, setNickname] = useState('');
+  const [secondNickname, setSecondNickname] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorNick, setErrorNick] = useState('');
   const [roomId, setRoomId] = useState('');
@@ -81,7 +81,8 @@ function Join() {
                 await messageTxn.wait();
                 console.log("Betted!", secondSigner); 
                 axios.post(`${localhost}/api/lobby/${roomID}`, {
-                    secondSigner
+                    secondSigner,
+                    secondNickname
                 }).then(response => {
                     console.log(response);
                 }).catch(err => {
@@ -91,7 +92,7 @@ function Join() {
                   replace: true,
                   state: {
                     id: roomID,
-                    name: nickname
+                    name: secondNickname
                   }
                 })
                 
@@ -105,16 +106,14 @@ function Join() {
     console.log("SUBMITTED!")
     e.preventDefault();
     try{
-        axios.get(`${localhost}/api/join/${roomID}`).then(response => {
-            if(nickname === response.data.secondNickname){
-              console.log("HEY")
-              setErrorNick('');
-                sendBet(response.data.amount);
-                
-            }else setErrorNick("The nickname is not registered in the game room")
-            console.log(response.data);
-        }).catch(error => {
-            console.log("Response Error ",error);
+        axios.get(`https://api.chess.com/pub/player/${secondNickname}`).then(
+          axios.get(`${localhost}/api/join/${roomID}`).then(response => {
+            sendBet(response.data.amount); 
+          }).catch(error => {
+              console.log("Response Error ",error);
+          })
+        ).catch((error) => {
+          setErrorNick("The nickname is doesn't exist");
         })
     }catch(err){
         console.log("Request error ",err)
@@ -132,7 +131,7 @@ function Join() {
       
         <div className='input-container'>
             <div className='join-input'>
-                <input placeholder='Enter your chess.com nickname' onChange={(e) => setNickname(e.target.value)} />
+                <input placeholder='Enter your chess.com nickname' onChange={(e) => setSecondNickname(e.target.value)} />
                 <p style={{color:'red'}}>{errorNick}</p>
                 {/* <input placeholder='Enter room ID' onChange={(e) => setRoomId(e.target.value)} /> */}
             </div>

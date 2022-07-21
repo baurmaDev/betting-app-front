@@ -14,19 +14,13 @@ const ENDPOINT = 'chess-socket.onrender.com';
 
 
 const Game = () => {
-  const [roomId, setRoomId] = useState('');
   const [loading, setLoading] = useState('');
-  const [firstAddress, setFirstAddress] = useState('');
-  const [secondAddress, setSecondAddress] = useState('');
-  const [firstNick, setFirstNick] = useState('');
-  const [secondNick, setSecondNick] = useState('');
   const [matchLink, setMatchLink] = useState('');
-  const [betAmount, setBetAmount] = useState(0);
   const [winnerName, setWinnerName] = useState('');
   const [copySuccess, setCopySuccess] = useState('');
   const [errorLink, setErrorLink] = useState('');
   const [input, setInput] = useState('');
-  const [user, setUser] = useState('');
+  const [user, setUser] = useState({});
   const [url, setUrl] = useState('');
   const {state} = useLocation();
   const {id, name} = state;
@@ -56,7 +50,6 @@ const Game = () => {
     })
     socket.on("roomData", ({ users }) => {
             if(users[users.length - 1].name !== name){
-              setUser(users[users.length - 1].name)
               alert(`${users[users.length - 1].name} has joined!`)
             }
             console.log("Hi!", users[users.length - 1].name);
@@ -72,6 +65,7 @@ const Game = () => {
   
   const onCheck = () => {
     console.log("Submitted!")
+    const {roomId, firstNick, secondNick, firstAddress, secondAddress, betAmount, url} = user;
     axios.get(`${localhost}/api/join/${roomId}`).then(response => {
         if(response.data.secondSigner){
           axios.get(`https://api.chess.com/pub/player/${firstNick}/games/archives`).then(response => {
@@ -162,13 +156,16 @@ const Game = () => {
       axios.get(`${localhost}/api/join/${id}`).then(response => {
         console.log("Get request!")
         const {_id,signerAddress, nickname, secondNickname,  amount,secondSigner} = response.data;
-        setFirstAddress(signerAddress);
-        setSecondAddress(secondSigner);
-        setRoomId(_id);
-        setFirstNick(nickname);
-        setSecondNick(secondNickname);
-        setBetAmount(amount);
-        setUrl(`https://chessbet.vercel.app/join/${id}`);
+        setUser({
+          firstAddress: signerAddress,
+          secondAddress: secondSigner,
+          roomId: _id,
+          firstNick: nickname,
+          secondNick: secondNickname,
+          betAmount: amount,
+          url: `https://chessbet.vercel.app/join/${id}`
+        })
+        
     }).catch(err => {
       console.log(err);
     })
@@ -197,7 +194,7 @@ const Game = () => {
               display: 'flex',
               justifyContent: 'space-between',
             }}>
-              <input value={url} ref={linkRef} type='text' style={{width: '315px'}}  />
+              <input value={user.url} ref={linkRef} type='text' style={{width: '315px'}}  />
               <div className='tooltip-container'>
                 <span onClick={copyToClipboard}>{copySuccess ? <DoneIcon color='success' sx={{ fontSize: 30 }} /> : <ContentCopyIcon />}</span>
                 {/* {copySuccess ? <span className="custom-tooltip">{copySuccess}</span> : '' } */}
@@ -221,7 +218,7 @@ const Game = () => {
   return (
     // <div className='app-container' style={{width: '350px', height: '270px'}}>
       <>
-      {winnerName ? <div className='app-container' style={{background: 'none'}}><Modal nick={winnerName} winner={winnerName === firstNick ? true : false} /> </div> : app()}
+      {winnerName ? <div className='app-container' style={{background: 'none'}}><Modal nick={winnerName} winner={winnerName === user.firstNick ? true : false} /> </div> : app()}
       </>
         
     

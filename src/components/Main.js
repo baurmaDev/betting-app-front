@@ -47,7 +47,7 @@ function Main() {
             .post(`${localhost}/api/create-game`, {
               signerAddress,
               nickname,
-              secondNickname,
+              // secondNickname,
               // link,
               amount
             })  
@@ -73,12 +73,7 @@ function Main() {
     })
     
   }
-  const loadAnimation = () => (
-    <div className='load-container'>
-      <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
-    </div>
-    
-  )
+ 
   
   return (
     <div className='app-container' style={{height: `${errorMessage ? '300px' : '400px'}`}}>
@@ -86,8 +81,8 @@ function Main() {
         <label >Enter your Chess.com nickname</label>
         <input placeholder=''  type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
         {errorMessage ? <p style={{color: 'red', fontSize: '14px', marginTop: '-12px'}}>{errorMessage}</p> : null}
-        <label >Enter Chess.com nickname of your opponent</label>
-        <input placeholder=''  type="text" value={secondNickname} onChange={(e) => setSecondNickname(e.target.value)} />
+        {/* <label >Enter Chess.com nickname of your opponent</label>
+        <input placeholder=''  type="text" value={secondNickname} onChange={(e) => setSecondNickname(e.target.value)} /> */}
         {/* <label >Enter Chess.com game link</label>
         <input placeholder='Link here'  type="text"  onChange={(e) => setLink(e.target.value)} /> */}
         <label>Enter Amount of Bet</label>
