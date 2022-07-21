@@ -6,6 +6,7 @@ import abi from '../utils/Bet.json';
 import { useNavigate, useParams } from "react-router-dom";
 import Load from './Load';
 import { BASE_URL } from './api';
+import { localhost } from './localhost';
 
 
 function Join() {
@@ -79,7 +80,7 @@ function Join() {
                 setLoading(true);
                 await messageTxn.wait();
                 console.log("Betted!", secondSigner); 
-                axios.post(`${BASE_URL}/api/lobby/${roomID}`, {
+                axios.post(`${localhost}/api/lobby/${roomID}`, {
                     secondSigner
                 }).then(response => {
                     console.log(response);
@@ -101,10 +102,12 @@ function Join() {
   }
   
   const onSubmit = (e) => {
+    console.log("SUBMITTED!")
     e.preventDefault();
     try{
-        axios.get(`${BASE_URL}/api/join/${roomID}`).then(response => {
+        axios.get(`${localhost}/api/join/${roomID}`).then(response => {
             if(nickname === response.data.secondNickname){
+              console.log("HEY")
               setErrorNick('');
                 sendBet(response.data.amount);
                 

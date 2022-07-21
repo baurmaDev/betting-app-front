@@ -1,11 +1,15 @@
 import axios from 'axios';
 import React, {useState, useEffect} from 'react'
 import { useLocation } from 'react-router-dom';
+import io from 'socket.io-client';
 import Load from './Load';
 import Modal from './Modal';
 import { BASE_URL } from './api';
+import { localhost } from './localhost';
 
-function Lobby() {
+const ENDPOINT = 'localhost:5000';
+
+const Lobby = () => {
   const [firstAddress, setFirstAddress] = useState('');
   const [secondAddress, setSecondAddress] = useState('');
   const [roomId, setRoomId] = useState('');
@@ -20,8 +24,43 @@ function Lobby() {
   const {state} = useLocation();
   const {id, name} = state;
   
+  const socket = io('http://localhost:5000/',{
+    cors: {
+        origin: "http://localhost:5000",
+        credentials: true
+    }
+  , transports: ['websocket']});
+
+  // const socket = io('https://chessbet.onrender.com',{
+  //   cors: {
+  //       origin: "https://chessbet.onrender.com",
+  //       credentials: true
+  //   }
+  // , transports: ['websocket']});
+  
+  useEffect(() => {
+    console.log("before socket emit")
+    socket.emit('join',{name, id}, (error) => {
+        if(error) {
+            alert(error);
+        }else{
+          console.log("Everything is ok!")
+        }
+    })
+    socket.on("roomData", ({ users }) => {
+            console.log(users);
+        });
+    
+    return () => {
+        // socket.emit('disconnect');
+        socket.off();
+    }
+         
+  },[ENDPOINT]);
+  
   const onCheck = () => {
-    axios.get(`${BASE_URL}/api/join/${roomId}`).then(response => {
+    console.log(roomId);
+    axios.get(`${localhost}/api/join/${roomId}`).then(response => {
         if(response.data.secondSigner){
           axios.get(`https://api.chess.com/pub/player/${firstNick}/games/archives`).then(response => {
             axios.get(`${response.data.archives[response.data.archives.length - 1]}`).then(response => {
@@ -34,12 +73,32 @@ function Lobby() {
                 setErrorLink('')
               }
               if((game.black.username === firstNick || game.white.username === firstNick) && (game.black.username === secondNick || game.white.username === secondNick)){
-          if(game.black.result != 'win'){
+          if(game.white.result === 'win'){
             if(game.white.username === secondNick){
               const winner = secondAddress;
               const amount = betAmount * 2;
               setLoading(true);
-              axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
+              axios.post(`${localhost}/api/withdraw/${roomId}`, {
+                winner,
+                amount
+              }).then(response => {
+                setLoading(false);
+                setWinnerName(secondNick);
+                console.log(response.data);
+                setErrorLink(response.data);
+              }).catch(err => {
+                console.log(err);
+              })
+            }else{
+              setWinnerName(firstNick);
+            }
+          }else if(game.black.result === 'win'){
+            console.log("Winner: ", game.black.username);
+            if(game.black.username === secondNick){
+              const winner = secondAddress;
+              const amount = betAmount * 2;
+              setLoading(true);
+              axios.post(`${localhost}/api/withdraw/${roomId}`, {
                 winner,
                 amount
               }).then(response => {
@@ -54,26 +113,24 @@ function Lobby() {
               setWinnerName(firstNick);
             }
           }else{
-            console.log("Winner: ", game.black.username);
-            if(game.black.username === secondNick){
-              const winner = secondAddress;
-              const amount = betAmount * 2;
-              setLoading(true);
-              axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
-                winner,
-                amount
-              }).then(response => {
-                setLoading(false);
-                setWinnerName(secondNick);
-                console.log(response.data);
-                setErrorLink(response.data);
-              }).catch(err => {
-                console.log(err);
-              })
-            }else{
-              setWinnerName(firstNick);
-            }
-          }
+                  console.log("Draw detected!")
+                  const draw = true;
+                  const amount = betAmount;
+                  
+                  setLoading(true);
+                  axios.post(`${localhost}/api/withdraw/${roomId}`, {
+                      firstAddress,
+                      secondAddress,
+                      draw,
+                      amount
+                    }).then(response => {
+                      setLoading(false);
+                      setErrorLink(response.data);
+                      console.log(response.data);
+                    }).catch(err => {
+                      console.log(err);
+                    })
+                }
         }else{
           setErrorLink("Not your match!!!");
         }
@@ -153,7 +210,7 @@ function Lobby() {
 
   useEffect(() =>  {
     setTimeout(() => {
-       axios.get(`${BASE_URL}/api/join/${id}`).then(response => {
+       axios.get(`${localhost}/api/join/${id}`).then(response => {
       const {_id, signerAddress, nickname, secondNickname,  amount, secondSigner} = response.data;
       console.log("First signer address from get: ", signerAddress);
       console.log("Second signer address from get: ", secondSigner);

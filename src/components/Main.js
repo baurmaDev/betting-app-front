@@ -7,6 +7,7 @@ import abi from '../utils/Bet.json';
 import { Link, useNavigate } from "react-router-dom";
 import Load from './Load';
 import { BASE_URL } from './api';
+import { localhost } from './localhost';
 
 
 function Main() {
@@ -43,7 +44,7 @@ function Main() {
           await messageTxn.wait();
           console.log("Betted!");
           axios
-            .post(`${BASE_URL}/api/create-game`, {
+            .post(`${localhost}/api/create-game`, {
               signerAddress,
               nickname,
               secondNickname,
@@ -52,7 +53,7 @@ function Main() {
             })  
             .then((response) => {
               console.log(response.data);
-              navigate("/game", { replace: true, state: {id: response.data.id} });
+              navigate("/game", { replace: true, state: {id: response.data.id, name: nickname} });
             }).catch(error => {
               console.log(error)
             });
