@@ -44,7 +44,7 @@ function Main() {
           await messageTxn.wait();
           console.log("Betted!");
           axios
-            .post(`${localhost}/api/create-game`, {
+            .post(`${BASE_URL}/api/create-game`, {
               signerAddress,
               nickname,
               // secondNickname,

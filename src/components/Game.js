@@ -66,7 +66,7 @@ const Game = () => {
   const onCheck = () => {
     console.log("Submitted!")
     const {roomId, firstNick, secondNick, firstAddress, secondAddress, betAmount, url} = user;
-    axios.get(`${localhost}/api/join/${roomId}`).then(response => {
+    axios.get(`${BASE_URL}/api/join/${roomId}`).then(response => {
         if(response.data.secondSigner){
           axios.get(`https://api.chess.com/pub/player/${firstNick}/games/archives`).then(response => {
             axios.get(`${response.data.archives[response.data.archives.length - 1]}`).then(response => {
@@ -87,7 +87,7 @@ const Game = () => {
                     const winner = firstAddress;
                     console.log(winner);
                     const amount = betAmount * 2;
-                    axios.post(`${localhost}/api/withdraw/${roomId}`, {
+                    axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                       winner,
                       amount
                     }).then(response => {
@@ -107,7 +107,7 @@ const Game = () => {
                     setWinnerName(firstNick);
                     console.log(winner);
                     const amount = betAmount * 2;
-                    axios.post(`${localhost}/api/withdraw/${roomId}`, {
+                    axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                       winner,
                       amount
                     }).then(response => {
@@ -125,7 +125,7 @@ const Game = () => {
                   const draw = true;
                   const amount = betAmount;
                   
-                  axios.post(`${localhost}/api/withdraw/${roomId}`, {
+                  axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                       firstAddress,
                       secondAddress,
                       draw,
@@ -153,7 +153,7 @@ const Game = () => {
 
   useEffect(() =>  {
     
-      axios.get(`${localhost}/api/join/${id}`).then(response => {
+      axios.get(`${BASE_URL}/api/join/${id}`).then(response => {
         console.log("Get request!")
         const {_id,signerAddress, nickname, secondNickname,  amount,secondSigner} = response.data;
         setUser({

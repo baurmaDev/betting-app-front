@@ -57,7 +57,7 @@ const Lobby = () => {
   const onCheck = () => {
     const {roomId, firstNick, secondNick, firstAddress, secondAddress, betAmount} = user;
 
-    axios.get(`${localhost}/api/join/${roomId}`).then(response => {
+    axios.get(`${BASE_URL}/api/join/${roomId}`).then(response => {
         if(response.data.secondSigner){
           axios.get(`https://api.chess.com/pub/player/${firstNick}/games/archives`).then(response => {
             axios.get(`${response.data.archives[response.data.archives.length - 1]}`).then(response => {
@@ -75,7 +75,7 @@ const Lobby = () => {
               const winner = secondAddress;
               const amount = betAmount * 2;
               setLoading(true);
-              axios.post(`${localhost}/api/withdraw/${roomId}`, {
+              axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                 winner,
                 amount
               }).then(response => {
@@ -95,7 +95,7 @@ const Lobby = () => {
               const winner = secondAddress;
               const amount = betAmount * 2;
               setLoading(true);
-              axios.post(`${localhost}/api/withdraw/${roomId}`, {
+              axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                 winner,
                 amount
               }).then(response => {
@@ -115,7 +115,7 @@ const Lobby = () => {
                   const amount = betAmount;
                   
                   setLoading(true);
-                  axios.post(`${localhost}/api/withdraw/${roomId}`, {
+                  axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                       firstAddress,
                       secondAddress,
                       draw,
@@ -145,7 +145,7 @@ const Lobby = () => {
 
   useEffect(() =>  {
     setTimeout(() => {
-       axios.get(`${localhost}/api/join/${id}`).then(response => {
+       axios.get(`${BASE_URL}/api/join/${id}`).then(response => {
       const {_id, signerAddress, nickname, secondNickname,  amount, secondSigner} = response.data;
       setUser({
           firstAddress: signerAddress,

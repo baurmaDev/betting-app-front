@@ -80,7 +80,7 @@ function Join() {
                 setLoading(true);
                 await messageTxn.wait();
                 console.log("Betted!", secondSigner); 
-                axios.post(`${localhost}/api/lobby/${roomID}`, {
+                axios.post(`${BASE_URL}/api/lobby/${roomID}`, {
                     secondSigner,
                     secondNickname
                 }).then(response => {
@@ -107,7 +107,7 @@ function Join() {
     e.preventDefault();
     try{
         axios.get(`https://api.chess.com/pub/player/${secondNickname}`).then(
-          axios.get(`${localhost}/api/join/${roomID}`).then(response => {
+          axios.get(`${BASE_URL}/api/join/${roomID}`).then(response => {
             sendBet(response.data.amount); 
           }).catch(error => {
               console.log("Response Error ",error);
