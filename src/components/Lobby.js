@@ -36,7 +36,8 @@ const Lobby = () => {
   
   useEffect(() => {
     console.log("before socket emit")
-    socket.emit('join',{name, id}, (error) => {
+    const room = id;
+    socket.emit('join',{name, room}, (error) => {
         if(error) {
             alert(error);
         }else{

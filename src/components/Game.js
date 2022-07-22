@@ -41,7 +41,8 @@ const Game = () => {
   
   useEffect(() => {
     console.log("before socket emit")
-    socket.emit('join',{name, id}, (error) => {
+    const room = id;
+    socket.emit('join',{name, room}, (error) => {
         if(error) {
             alert(error);
         }else{
@@ -52,8 +53,8 @@ const Game = () => {
             if(users[users.length - 1].name !== name){
               alert(`${users[users.length - 1].name} has joined!`)
             }
-            console.log("Hi!", users[users.length - 1].name);
-        });
+            console.log(users);
+          });
     
     return () => {
         // socket.emit('disconnect');
