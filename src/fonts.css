@@ -6,3 +6,19 @@
     font-family: "Josefin";
     src: url(./assets/Josefin_Sans/JosefinSans-VariableFont_wght.ttf);
 }
+@font-face {
+    font-family: "Open-Sans-ExtraBold";
+    src: url('../public/assets/fonts/OpenSans/OpenSans-ExtraBold.ttf');
+}
+@font-face {
+    font-family: "Open-Sans-Bold";
+    src: url('../public/assets/fonts/OpenSans/OpenSans-Bold.ttf');
+}
+@font-face {
+    font-family: "Open-Sans-Medium";
+    src: url('../public/assets/fonts/OpenSans/OpenSans-Medium.ttf');
+}
+@font-face {
+    font-family: "Open-Sans-Mixed";
+    src: url('../public/assets/fonts/OpenSans/OpenSans-Regular.ttf');
+}

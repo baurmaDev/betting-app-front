@@ -1,7 +1,7 @@
 import React from 'react'
 import './modal.css'
-import loser from '../../assets/loser.png'; 
-import winnerLogo from '../../assets/winner.png'; 
+import loser from '../../assets/images/loser.png'; 
+import winnerLogo from '../../assets/images/winner.png'; 
 
 
 function Modal({nick, winner}) {

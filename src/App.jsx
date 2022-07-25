@@ -1,7 +1,9 @@
 import './App.css';
 import {useState, useEffect} from 'react';
 import { Navigate } from "react-router-dom";
+// import {chessFigure, hand, repeat, wallet} from './assets/images'
 import {isMobile} from 'react-device-detect';
+import { FiveGRounded } from '@mui/icons-material';
 // import {WalletConnectProvider} from "@walletconnect/web3-provider";
 // import { providers } from "ethers";
 
@@ -61,7 +63,40 @@ function App() {
     if(!currentAccount){
       return(
       <div className="App">
-        <div className='app-container'>
+        <div className="container">
+          <div className="header">
+            <h1>ChessBet</h1>
+            <a>How to Play?</a>
+          </div>
+          <div className="main">
+            <div className="left-side">
+              <div className="big-text">
+                <div className="icons">
+                  <img src='assets/images/wallet.png' alt='wallet' />
+                  <img src='assets/images/chess-figure.png' alt='chess-figure' />
+                  <img className='hand' src='assets/images/hand-ether.png' alt='hand-ether' />
+                  <img src='assets/images/repeat.png' alt='repeat' />
+                </div>
+                <div className='text-container'>
+                  <div className="text"> Bet <span> Ether</span></div>
+                  <div className="text">Play <span> Chess</span></div>
+                  <div className="text">Earn <span> Crypto</span></div>
+                  <div className="text">Repeat</div>
+                </div>
+                
+              </div>
+              <div className="description">
+                <p>Bet Ether, Play on <b>Chess.com with opponent</b> and Earn <br /> crypto on the decentralized betting platform</p>
+              </div>
+              <button className='app-button'>Play Now</button>
+            </div>
+            <div className="right-side">
+              <img src="assets/chessBoard.gif" alt='Chess animated' />
+            </div>
+          </div>
+          
+        </div>
+        {/* <div className='app-container'>
           <div className='app-label'>
             <img src='https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/SamCopeland/phpZC7lK9.png' alt="chess" />
             <div className='label-text'>
@@ -69,7 +104,7 @@ function App() {
             </div>
             <button onClick={connectWallet}>Connect</button>
           </div>
-        </div>
+        </div> */}
       </div>
       )
     }else{

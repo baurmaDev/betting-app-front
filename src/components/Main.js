@@ -18,7 +18,7 @@ function Main() {
   const [id, setId] = useState();
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const contractAddress = '0x5CBc5735309FB70767f3820d9E561F1b74133473'
+  const contractAddress = '0x583BfFcff11067F1E3783153a6009290E384b828'
   const contractABI = abi.abi;
   let navigate = useNavigate();
 
@@ -38,7 +38,8 @@ function Main() {
           const signerAddress = await signer.getAddress();
           console.log(signerAddress)
           const messageTxn = await betContract.setBet('Bet', {
-            value: ethers.utils.parseUnits(amount, "ether")
+            value: ethers.utils.parseUnits(amount, "ether"),
+            gasLimit: ethers.utils.hexlify(80000)
           });
           setLoading(true);
           await messageTxn.wait();
