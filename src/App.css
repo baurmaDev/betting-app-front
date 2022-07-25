@@ -1,19 +1,31 @@
 
-.App{
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.App {
   display: flex;
   flex-direction: column;
+} 
 
-}
-.header{
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.container{
+
+.container {
   width: 80%;
   margin: 0 auto;
   padding: 15px;
+  height: 100vh;
 }
+
 .left-side{
   display: flex;
   flex-direction: column;
@@ -33,6 +45,32 @@
   display: flex;
   flex-direction: column;
 }
+
+.hand {
+  transform: translateX(-25px);
+}
+
+.wallet-icon {
+  transform: translateX(-5px);
+}
+
+.wallet-icon-text {
+  margin-left: 25px;
+}
+
+.chess-figure-icon-text {
+  margin-left: 40px;
+}
+
+.hand-icon-text {
+  margin: 0;
+  transform: translateX(-17px);
+}
+
+.repeat-icon-text {
+  margin-left: 40px;
+}
+
 .text{
   display: flex;
   font-size: 64px;
@@ -43,17 +81,15 @@
 .description p{
   font-size: 18px;
   font-family: "Open-Sans-Mixed";
+  margin-top: 35px;
 }
-.icons img{
-  
-  width: 50px;
-  height: 50px;
-}
+
 .hand{
   width: 101px !important;
   height: 97px !important;
 }
-.app-button{
+
+.app-button {
   width: 441px;
   height: 112px;
   background-color: #9C7FE8;
@@ -62,7 +98,13 @@
   font-weight: bolder;
   color: #FFFFFF;
   margin-top: 90px;
+  border: none;
 }
+
+.app-button:hover {
+  cursor: pointer;
+}
+
 .app-container{
   display: flex;
   flex-direction: column;
