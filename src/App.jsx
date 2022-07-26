@@ -71,19 +71,12 @@ function App() {
           <div className="main">
             <div className="left-side">
               <div className="big-text">
-                <div className="icons">
-                  <img src='assets/images/wallet.png' alt='wallet' />
-                  <img src='assets/images/chess-figure.png' alt='chess-figure' />
-                  <img className='hand' src='assets/images/hand-ether.png' alt='hand-ether' />
-                  <img src='assets/images/repeat.png' alt='repeat' />
-                </div>
                 <div className='text-container'>
-                  <div className="text"> Bet <span> Ether</span></div>
-                  <div className="text">Play <span> Chess</span></div>
-                  <div className="text">Earn <span> Crypto</span></div>
-                  <div className="text">Repeat</div>
+                  <div className="text"><img className='wallet-icon' src='assets/images/wallet.png' alt='wallet' /> <span className="wallet-icon-text">BetEther</span></div>
+                  <div className="text"><img src='assets/images/chess-figure.png' alt='chess-figure' /><span className="chess-figure-icon-text">PlayChess</span></div>
+                  <div className="text"><img className='hand' src='assets/images/hand-ether.png' alt='hand-ether' /><span className="hand-icon-text">EarnCrypto</span></div>
+                  <div className="text"><img src='assets/images/repeat.png' alt='repeat' /><span className="repeat-icon-text">Repeat</span></div>
                 </div>
-                
               </div>
               <div className="description">
                 <p>Bet Ether, Play on <b>Chess.com with opponent</b> and Earn <br /> crypto on the decentralized betting platform</p>
