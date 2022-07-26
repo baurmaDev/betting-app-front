@@ -1,7 +1,6 @@
 import React from 'react'
 import './modal.css'
-import loser from '../../assets/images/loser.png'; 
-import winnerLogo from '../../assets/images/winner.png'; 
+
 
 
 function Modal({nick, winner}) {
@@ -9,7 +8,7 @@ function Modal({nick, winner}) {
   return (
     <div className="container">
         <div className="cookiesContent" id="cookiesPopup">
-            <img src={winner ? winnerLogo : loser} alt="loooser" />
+            <img src={winner ? 'assets/images/winner.png' : 'assets/images/loser.png'} alt="loooser" />
             {winner ? <h2>You are the winner YAAAY</h2> : <p>You are looser. The winner is <strong>{nick}</strong></p>}
             
         </div>

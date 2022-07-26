@@ -77,25 +77,29 @@ function Main() {
  
   
   return (
-    <div className='app-container' style={{height: `${errorMessage ? '300px' : '400px'}`}}>
-      <form className='main-form' onSubmit={onSubmit}>
-        <label >Enter your Chess.com nickname</label>
-        <input placeholder=''  type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
-        {errorMessage ? <p style={{color: 'red', fontSize: '14px', marginTop: '-12px'}}>{errorMessage}</p> : null}
-        {/* <label >Enter Chess.com nickname of your opponent</label>
-        <input placeholder=''  type="text" value={secondNickname} onChange={(e) => setSecondNickname(e.target.value)} /> */}
-        {/* <label >Enter Chess.com game link</label>
-        <input placeholder='Link here'  type="text"  onChange={(e) => setLink(e.target.value)} /> */}
-        <label>Enter Amount of Bet</label>
-        <input 
-         placeholder='0.000 Ether' name='currency-field' value={amount}
-         type='number' step='0.001' min='0.001' onChange={(e) => setAmount(e.target.value)}
-         />
-      </form>
-      <span className='start-btn' style={{marginTop: `${errorMessage ? '100px' : '260px'}`}} onClick={onSubmit}>START</span>
-      { loading && <Load />}
+    <>
+    
+      <div className='app-container' style={{height: `${errorMessage ? '300px' : '400px'}`}}>
+        <label style={{
+          fontFamily: 'Open-Sans-Bold',
+          fontSize: '36px',
+          marginBottom: '20px'
+        }}>Place a bet</label>
+        <form className='form1' onSubmit={onSubmit}>
+          <input placeholder='Enter your Chess.com nickname'  type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+          {errorMessage ? <p style={{color: 'red', fontSize: '14px', marginTop: '-12px'}}>{errorMessage}</p> : null}
+          
+          <input 
+          placeholder='Enter amount of stake' name='currency-field' value={amount}
+          type='number' step='1' min='1' onChange={(e) => setAmount(e.target.value)}
+          />
+        </form>
+        {loading ? <Load /> : <div className='btn' onClick={onSubmit}><span>BET</span></div>}
       
-    </div>
+      </div>
+      <img className='chess-3d' src='assets/images/chess-3d.png' alt='chess figure'/>
+      <img className='chess-3d-back' src='assets/images/chess-3d-back.png' alt='chess back' />
+    </>
   )
 }
 

@@ -63,27 +63,13 @@
   color: #FFFFFF;
   margin-top: 90px;
 }
-.app-container{
-  display: flex;
-  flex-direction: column;
-  background-color: #282836;
-  border-radius: 3%;
-  padding: 15px;
-  position: fixed;
-  width: 300px;
-  height: 200px;
-  top: 50%;
-  left: 50%;
-  margin-top: -280px;
-  margin-left: -150px;
-    
-}
 
-.app-label{
+
+/* .app-label{
   display: flex;
   justify-content: space-between;
-}
-.app-label img{
+} */
+/* .app-label img{
   width: 40px;
   height: 40px;
   object-fit:fill;
@@ -103,5 +89,5 @@
   color:#FFFFFF;
   font-family: "Roboto" sans-serif;
   cursor:pointer;
-}
+} */
 
