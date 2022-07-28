@@ -15,7 +15,7 @@ function Join() {
   const [errorNick, setErrorNick] = useState('');
   const [roomId, setRoomId] = useState('');
   const [currentAccount, setCurrentAccount] = useState('');
-  const contractAddress = '0x5CBc5735309FB70767f3820d9E561F1b74133473'
+  const contractAddress = '0x583BfFcff11067F1E3783153a6009290E384b828';
   const contractABI = abi.abi;
   
   let navigate = useNavigate();
@@ -64,9 +64,11 @@ function Join() {
     
   }
   const sendBet = async (amount) => {
+
         try{
             const {ethereum} = window;
-            console.log(amount);
+            console.log(contractAddress);
+            console.log(abi.abi);
             if(ethereum){
                 console.log("Process started!")
                 const provider = new ethers.providers.Web3Provider(ethereum);
@@ -75,7 +77,8 @@ function Join() {
                 const secondSigner = await signer.getAddress();
 
                 const messageTxn = await betContract.setBet('Bet', {
-                    value: ethers.utils.parseUnits(amount.toString(), "ether")
+                  value: ethers.utils.parseUnits(amount, "ether"),
+                  gasLimit: ethers.utils.hexlify(200000)
                 });
                 setLoading(true);
                 await messageTxn.wait();

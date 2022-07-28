@@ -6,6 +6,7 @@
     font-family: "Josefin";
     src: url(../public/assets/fonts/Josefin_Sans/JosefinSans-VariableFont_wght.ttf);
 }
+
 @font-face {
     font-family: "Open-Sans-ExtraBold";
     src: url('../public/assets/fonts/OpenSans/OpenSans-ExtraBold.ttf');

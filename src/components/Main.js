@@ -8,21 +8,19 @@ import { Link, useNavigate } from "react-router-dom";
 import Load from './Load';
 import { BASE_URL } from './api';
 import { localhost } from './localhost';
-
+import Notification from './Notification'
 
 function Main() {
   const [nickname, setNickname] = useState('');
-  const [secondNickname, setSecondNickname] = useState('');
-  const [link, setLink] = useState('')
+  const [potential, setPotential] = useState(0);
   const [amount, setAmount] = useState(0);
-  const [id, setId] = useState();
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const contractAddress = '0x583BfFcff11067F1E3783153a6009290E384b828'
   const contractABI = abi.abi;
   let navigate = useNavigate();
 
-
+  
   
   const sendBet = async () => {
     console.log(amount);
@@ -63,39 +61,59 @@ function Main() {
         console.log(error);
       }
   }
+  useEffect(() => {setTimeout(() => setErrorMessage(''), 10000)}, [errorMessage])
   
   const onSubmit = (e) => {
+    console.log('Submitted!')
     e.preventDefault();
-    axios.get(`https://api.chess.com/pub/player/${nickname}`).then(
-      sendBet
-    )
-    .catch((error) => {
-      setErrorMessage("This username doesn't exist");
-    })
+    if(amount < 1) setErrorMessage('Amount of stake shoud be equal or higher then 1')
+    else{
+      console.log('request');
+      axios.get(`https://api.chess.com/pub/player/${nickname}`).then(
+        sendBet
+      )
+      .catch((error) => {
+        setErrorMessage("This username doesn't exist");
+      })
+    }
+    console.log(errorMessage)
     
   }
- 
+  const handleChange = (e) => {
+    setAmount(e.target.value);
+    setPotential((e.target.value * 2) - (e.target.value * 2) * 0.1);
+  }
   
   return (
-    <div className='app-container' style={{height: `${errorMessage ? '300px' : '400px'}`}}>
-      <form className='main-form' onSubmit={onSubmit}>
-        <label >Enter your Chess.com nickname</label>
-        <input placeholder=''  type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
-        {errorMessage ? <p style={{color: 'red', fontSize: '14px', marginTop: '-12px'}}>{errorMessage}</p> : null}
-        {/* <label >Enter Chess.com nickname of your opponent</label>
-        <input placeholder=''  type="text" value={secondNickname} onChange={(e) => setSecondNickname(e.target.value)} /> */}
-        {/* <label >Enter Chess.com game link</label>
-        <input placeholder='Link here'  type="text"  onChange={(e) => setLink(e.target.value)} /> */}
-        <label>Enter Amount of Bet</label>
-        <input 
-         placeholder='0.000 Ether' name='currency-field' value={amount}
-         type='number' step='0.001' min='0.001' onChange={(e) => setAmount(e.target.value)}
-         />
-      </form>
-      <span className='start-btn' style={{marginTop: `${errorMessage ? '100px' : '260px'}`}} onClick={onSubmit}>START</span>
-      { loading && <Load />}
+    <>
+      <div className='app-container'>
+        <label style={{
+          fontFamily: 'Open-Sans-Bold',
+          fontSize: '36px',
+          marginBottom: '20px'
+        }}>Place a bet</label>
+        <form className='form1' onSubmit={onSubmit}>
+          <input placeholder='Enter your Chess.com nickname'  type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+          
+          <input 
+          placeholder='Enter amount of stake' name='currency-field' value={amount}
+          type='number' step='1' min='1' onChange={(e) => handleChange(e)}
+          />
+          {potential !== 0 &&
+            <div className='potential'>
+              Potential winnings: {potential} MATIC
+            </div>
+          }
+          
+        </form>
+        {loading ? <Load /> : <div className='btn' onClick={onSubmit}><span>BET</span></div>}
+        
+      </div>
+      <img className='chess-3d-back' src='assets/images/chess-3d-back.png' alt='chess back' />
+      <img className='chess-3d' src='assets/images/chess-3d.png' alt='chess figure'/>
+      {errorMessage && <Notification message={errorMessage} icon={false} />}
       
-    </div>
+    </>
   )
 }
 

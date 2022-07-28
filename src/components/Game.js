@@ -9,6 +9,7 @@ import Load from './Load';
 import Modal from './Modal';
 import { localhost } from './localhost';
 import { BASE_URL } from './api';
+import Notification from './Notification'
 
 const ENDPOINT = 'chess-socket.onrender.com';
 
@@ -21,9 +22,11 @@ const Game = () => {
   const [errorLink, setErrorLink] = useState('');
   const [input, setInput] = useState('');
   const [user, setUser] = useState({});
-  const [url, setUrl] = useState('');
+  const [notification, setNotification] = useState({}); 
+  const [notificationHandler, setNotificationHandler] = useState(false);
   const {state} = useLocation();
   const {id, name} = state;
+  const [player, setPlayer] = useState('');
   const linkRef = useRef(null);
  
   const socket = io('https://chessbet.onrender.com',{
@@ -50,8 +53,11 @@ const Game = () => {
         }
     })
     socket.on("roomData", ({ users }) => {
-            if(users[users.length - 1].name !== name){
-              alert(`${users[users.length - 1].name} has joined!`)
+            const user = users[users.length - 1].name;
+            if(user !== name){
+              setNotification({message:`${user} has joined` , icon: true})
+              setNotificationHandler(!setNotificationHandler);
+              // alert(`${users[users.length - 1].name} has joined!`)
             }
             console.log(users);
           });
@@ -144,7 +150,9 @@ const Game = () => {
               }
             })
         })}else{
-          setErrorLink('The Second Player has not joined yet')
+          console.log("The Second Player has not joined yet");
+          setNotification({message: 'The Second Player has not joined yet', icon: false})
+          setNotificationHandler(!setNotificationHandler);
         }
     }).catch(err => {
       console.log("Error request BASE_URL/api/join/roomID",err);
@@ -185,39 +193,44 @@ const Game = () => {
     setMatchLink(e.target.value);
     setInput(e.target.value);
   }
+  // useEffect(() => {
+  //   console.log(notification)
+  //   if(notification !== undefined)setTimeout(() => setNotification({}), 10000);
+  // }, [notification])
+  useEffect(() => {
+    console.log(notification ? 'true' : 'false')
+    setTimeout(() => setNotification(), 10000);
+  }, [notificationHandler])
   const app = () => (
-    <div className='app-container' style={{width: '350px', height: '270px'}}>
-      {/* {user ? <h3>{user} joined</h3> : ''} */}
-      <div className='game-link'>
-          <div className='generated'>
-            <label>Generated link:</label>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}>
-              <input value={user.url} ref={linkRef} type='text' style={{width: '315px'}}  />
-              <div className='tooltip-container'>
-                <span onClick={copyToClipboard}>{copySuccess ? <DoneIcon color='success' sx={{ fontSize: 30 }} /> : <ContentCopyIcon />}</span>
-                {/* {copySuccess ? <span className="custom-tooltip">{copySuccess}</span> : '' } */}
-              </div>
+    <>
+      <div className='app-container'>
+          <div className='form1'>
+            <label style={{
+          fontFamily: 'Open-Sans-Bold',
+          fontSize: '24px',
+          marginBottom: '20px',
+          textAlign: 'center'
+        }}>Copy the address and send to <br /> your opponent</label>
+            <div className='copy-link'>
+              <input className='copy-link-input' value={user.url} ref={linkRef} type='text'   />
+              <button type="button" className="copy-link-button">
+                <span className="material-icons"  onClick={copyToClipboard}>{copySuccess ? <DoneIcon color='success' sx={{ fontSize: 30 }} /> : "Copy"}</span>
+              </button>
               
             </div>
-            
+            {player ? <input placeholder='Enter game link' onChange={(e) => handleInput(e)} /> : <span className='wait'>Wait until the opponent will join</span>}
+            {/* <input placeholder='Enter game link' onChange={(e) => handleInput(e)} /> */}
           </div>
-          <div className='generated'>
-            <label>Enter match link: </label>
-            <input placeholder='Enter game link' onChange={(e) => handleInput(e)} />
-            {errorLink ? <p style={{fontSize: '14px', color: 'red'}}>{errorLink}</p> : ''}
-          </div>
-        </div>
-        <span className='start-btn' onClick={onCheck} style={{marginTop: `${errorLink ? '10px' : ''}`}}>CHECK RESULT</span>
-        {/* {winnerName ? <h3 style={{color: 'whitesmoke'}}>Winner is: {winnerName}</h3> : ''} */}
-
-        {loading && <Load />}
+        {loading ? <Load /> : <span className='btn' onClick={onCheck} ><span>Get a winnings</span></span>}
     </div>
+    <img className='chessBoard-back' src='assets/images/chess-board.png.png' alt='chess-board' />
+    <img className='wallet-3d' src='assets/images/wallet-3d.png' alt='wallet-3d' />
+    { notification && <Notification message={notification.message} icon={notification.icon} /> }
+    {/* {notification ? <Notification message={"dsds"} icon={false} /> : <div style={{width:'400px', height: '500px', backgroundColor: 'red'}}></div>} */}
+    </>
+    
   )
   return (
-    // <div className='app-container' style={{width: '350px', height: '270px'}}>
       <>
       {winnerName ? <div className='app-container' style={{background: 'none'}}><Modal nick={winnerName} winner={winnerName === user.firstNick ? true : false} /> </div> : app()}
       </>

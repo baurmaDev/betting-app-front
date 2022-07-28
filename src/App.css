@@ -91,41 +91,23 @@ body, html {
 
 .app-button {
   width: 441px;
+  cursor: pointer;
   height: 112px;
   background-color: #9C7FE8;
   border-radius: 10px;
   font-size: 40px;
   font-weight: bolder;
   color: #FFFFFF;
-  margin-top: 90px;
+  margin-top: 75px;
   border: none;
 }
 
-.app-button:hover {
-  cursor: pointer;
-}
 
-.app-container{
-  display: flex;
-  flex-direction: column;
-  background-color: #282836;
-  border-radius: 3%;
-  padding: 15px;
-  position: fixed;
-  width: 300px;
-  height: 200px;
-  top: 50%;
-  left: 50%;
-  margin-top: -280px;
-  margin-left: -150px;
-    
-}
-
-.app-label{
+/* .app-label{
   display: flex;
   justify-content: space-between;
-}
-.app-label img{
+} */
+/* .app-label img{
   width: 40px;
   height: 40px;
   object-fit:fill;
@@ -145,5 +127,5 @@ body, html {
   color:#FFFFFF;
   font-family: "Roboto" sans-serif;
   cursor:pointer;
-}
+} */
 

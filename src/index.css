@@ -14,4 +14,51 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #E9EBEE;
+  color: black;
+  border-radius: 15px;
+  width: 404px;
+  height: 450px;
+  margin: 0 auto;
+  margin-top: 214.5px;
+  padding-top: 30px;
+  z-index: 999;
+}
+
+.form1{
+  
+  display: flex;
+  flex-direction: column;
+  
+}
+.form1 input:not(.copy-link-input){
+  width: 343px;
+  height: 50px;
+  margin-top: 18.5px;
+  border-radius: 15px;
+  border: none;
+  padding: 5px 0 5px 10px;
+  font-size: 18px;
+}
+.btn{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 343px;
+  height: 70px;
+  background-color: #9C7FE8;
+  color: #FFFFFF;
+  border-radius: 15px;
+  margin-top: 55px;
+  font-family: 'Open-Sans-Bold';
+  font-size: 20px;
+  cursor: pointer;
+}
+.btn span{
+  margin: 0 auto;
+}
 
