@@ -7,10 +7,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import Load from './Load';
 import { BASE_URL } from './api';
 import { localhost } from './localhost';
+import Notification from './Notification'
+
 
 
 function Join() {
   const [secondNickname, setSecondNickname] = useState('');
+  const [amount, setAmount] = useState();
   const [loading, setLoading] = useState(false);
   const [errorNick, setErrorNick] = useState('');
   const [roomId, setRoomId] = useState('');
@@ -109,13 +112,17 @@ function Join() {
     console.log("SUBMITTED!")
     e.preventDefault();
     try{
-        axios.get(`https://api.chess.com/pub/player/${secondNickname}`).then(
-          axios.get(`${BASE_URL}/api/join/${roomID}`).then(response => {
-            sendBet(response.data.amount); 
-          }).catch(error => {
-              console.log("Response Error ",error);
-          })
+        axios.get(`https://api.chess.com/pub/player/${secondNickname}`).then((response) => {
+          sendBet(amount);
+          // axios.get(`${BASE_URL}/api/join/${roomID}`).then(response => {
+          //   sendBet(response.data.amount); 
+          // }).catch(error => {
+          //     console.log("Response Error ",error);
+          // })
+        }
+
         ).catch((error) => {
+          console.log(error);
           setErrorNick("The nickname is doesn't exist");
         })
     }catch(err){
@@ -123,6 +130,9 @@ function Join() {
     }
   }
   useEffect(() => {
+    axios.get(`${BASE_URL}/api/join/${roomID}`).then(response => {
+      setAmount(response.data.amount); 
+    })
     setTimeout(() => {
       console.log("Started")
       checkIfWalletIsConnected();
@@ -130,21 +140,34 @@ function Join() {
     
   }, [])
   const input = () => (
-    <div className='app-container'>
-      
-        <div className='input-container'>
-            <div className='join-input'>
-                <input placeholder='Enter your chess.com nickname' onChange={(e) => setSecondNickname(e.target.value)} />
-                <p style={{color:'red'}}>{errorNick}</p>
-                {/* <input placeholder='Enter room ID' onChange={(e) => setRoomId(e.target.value)} /> */}
-            </div>
-        </div>
-
-        <span className='start-btn' style={{marginTop: '0px'}} onClick={onSubmit}>START</span>
-
-        { loading && <Load />}
-        
-    </div>
+    <>
+      <div className='app-container'>
+        <label style={{
+            fontFamily: 'Open-Sans-Bold',
+            fontSize: '24px',
+            marginBottom: '20px',
+            textAlign: 'center'
+          }}>Join the bid</label>
+          <div className='form1'>
+              
+                  <input placeholder='Enter your chess.com nickname' onChange={(e) => setSecondNickname(e.target.value)} />
+                  
+                  <label style={{
+            fontFamily: 'Open-Sans-Bold',
+            fontSize: '16px',
+            padding: '10px'
+          }}>Bet amount: {amount} MATIC</label>
+                  {/* <p style={{color:'red'}}>{errorNick}</p> */}
+              
+          </div>
+          {loading ? <Load /> : <span className='btn' onClick={onSubmit}><span>Join</span></span>}
+          
+      </div>
+      <img className='chess-3d-back' src='/assets/images/chess-3d-back.png' alt='chess back' />
+      <img className='chess-3d' src='/assets/images/chess-3d.png' alt='chess figure'/>
+      {errorNick && <Notification message={errorNick} icon={false} />}
+    </>
+    
   )
 
   return (

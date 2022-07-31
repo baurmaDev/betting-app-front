@@ -66,7 +66,7 @@ function Main() {
   const onSubmit = (e) => {
     console.log('Submitted!')
     e.preventDefault();
-    if(amount < 1) setErrorMessage('Amount of stake shoud be equal or higher then 1')
+    if(amount < 0.001) setErrorMessage('Amount of stake shoud be equal or higher then 0.001')
     else{
       console.log('request');
       axios.get(`https://api.chess.com/pub/player/${nickname}`).then(

@@ -66,7 +66,6 @@ function App() {
         <div className="container">
           <div className="header">
             <h1>ChessBet</h1>
-            <a href="#" alt="rules">How to Play?</a>
           </div>
           <div className="main">
             <div className="left-side">

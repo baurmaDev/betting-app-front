@@ -44,6 +44,8 @@ const Game = () => {
   
   useEffect(() => {
     console.log("before socket emit")
+    const items = JSON.parse(localStorage.getItem('joined'));
+    setPlayer(items);
     const room = id;
     socket.emit('join',{name, room}, (error) => {
         if(error) {
@@ -55,8 +57,11 @@ const Game = () => {
     socket.on("roomData", ({ users }) => {
             const user = users[users.length - 1].name;
             if(user !== name){
+              setPlayer(user);
               setNotification({message:`${user} has joined` , icon: true})
               setNotificationHandler(!setNotificationHandler);
+                localStorage.setItem('joined', JSON.stringify(true));
+
               // alert(`${users[users.length - 1].name} has joined!`)
             }
             console.log(users);
@@ -80,7 +85,7 @@ const Game = () => {
               console.log(response.data.games[response.data.games.length - 1].url);
               const game = response.data.games[response.data.games.length - 1].url === matchLink ? response.data.games[response.data.games.length - 1] : false;
               if(!game){
-                setErrorLink('The game is not over yet or the wrong link has been entered');
+                setNotification({message: 'The game is not over yet or the wrong link has been entered', icon: false});
               }
               else{
                 setErrorLink('')
@@ -146,7 +151,7 @@ const Game = () => {
                     })
                 }
               }else{
-                setErrorLink("Not your match!!!")
+                alert("Not your match!!!")
               }
             })
         })}else{
@@ -199,7 +204,7 @@ const Game = () => {
   // }, [notification])
   useEffect(() => {
     console.log(notification ? 'true' : 'false')
-    setTimeout(() => setNotification(), 10000);
+    setTimeout(() => setNotification(), 5000);
   }, [notificationHandler])
   const app = () => (
     <>

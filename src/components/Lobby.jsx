@@ -166,12 +166,26 @@ const Lobby = () => {
    
   }, [])
   const app = () => (
-    <div className='app-container'>
-        <input placeholder='Enter game link' onChange={(e) => setMatchLink(e.target.value)} />
-        {errorLink ? <p style={{fontSize: '14px', color: 'red'}}>{errorLink}</p> : ''}
-        <span className='start-btn' onClick={onCheck} >CHECK RESULT</span>
-        {loading && <Load />}
-    </div>
+    <>
+      <div className='app-container'>
+        <label style={{
+            fontFamily: 'Open-Sans-Bold',
+            fontSize: '24px',
+            marginBottom: '20px',
+            textAlign: 'center'
+          }}>Enter the link when the <br /> match is over</label>
+        <div className="form1">
+          <input placeholder='Enter game link' onChange={(e) => setMatchLink(e.target.value)} />
+          {errorLink ? <p style={{fontSize: '12px', color: 'red', fontFamily:'Open-Sans-Mixed'}}>{errorLink}</p> : ''}
+          {loading ? <Load /> : <span className='btn' onClick={onCheck} ><span>Get a winnings</span></span>}
+        </div>
+          
+      </div>
+      <img className='chessBoard-back' src='assets/images/chess-board.png.png' alt='chess-board' />
+      <img className='wallet-3d' src='assets/images/wallet-3d.png' alt='wallet-3d' />
+    </>
+    
+    
   )
 
   return (

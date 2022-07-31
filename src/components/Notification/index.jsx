@@ -13,14 +13,15 @@ const Index = ({message, icon}) => {
   }, [])  
   return (
     <div className='notification-container' style={{
-        display: (close || !message) && 'none'
+        display: (close || !message) && 'none',
+        backgroundColor: icon && 'green'
     }}>
         <div className="notification-header">
           <span style={{cursor: 'pointer'}} onClick={() => setClose(!close)}><CancelIcon /></span>
         </div>
         <div className="notification-text">
             <div className="notification-icon">
-              {icon ? <DoneIcon /> : <ErrorIcon fontSize='large' />}
+              {icon ? <DoneIcon fontSize='large'  /> : <ErrorIcon fontSize='large' />}
               
             </div>
             <div className="notification-message">
