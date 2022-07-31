@@ -9,12 +9,20 @@ import Load from './Load';
 import Modal from './Modal';
 import { localhost } from './localhost';
 import { BASE_URL } from './api';
-import Notification from './Notification'
+import Notification from './Notification';
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
 
 const ENDPOINT = 'chess-socket.onrender.com';
 
 
 const Game = () => {
+  const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState('');
   const [matchLink, setMatchLink] = useState('');
   const [winnerName, setWinnerName] = useState('');
@@ -28,7 +36,14 @@ const Game = () => {
   const {id, name} = state;
   const [player, setPlayer] = useState('');
   const linkRef = useRef(null);
- 
+  
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  }
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  }
+  const steps = ['step 1', 'step 2', 'step 3'];
   const socket = io('https://chessbet.onrender.com',{
     cors: {
         origin: "https://chessbet.onrender.com",
@@ -57,6 +72,7 @@ const Game = () => {
     socket.on("roomData", ({ users }) => {
             const user = users[users.length - 1].name;
             if(user !== name){
+              setActiveStep(1);
               setPlayer(user);
               setNotification({message:`${user} has joined` , icon: true})
               setNotificationHandler(!setNotificationHandler);
@@ -209,34 +225,106 @@ const Game = () => {
   const app = () => (
     <>
       <div className='app-container'>
-          <div className='form1'>
-            <label style={{
+        <Stepper activeStep={activeStep} style={{padding: '10px'}}>
+          <Step>
+            <StepLabel>Step 1</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Step 2</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Step 3</StepLabel>
+          </Step>
+        </Stepper>
+        {activeStep === steps.length ? (
+          <React.Fragment>
+            
+            
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            {activeStep === 0 && 
+              <Typography sx={{ mt: 2, mb: 1 }}>
+              <div className='form1'> 
+                <label style={{
           fontFamily: 'Open-Sans-Bold',
-          fontSize: '24px',
+          fontSize: '20px',
           marginBottom: '20px',
           textAlign: 'center'
         }}>Copy the address and send to <br /> your opponent</label>
-            <div className='copy-link'>
-              <input className='copy-link-input' value={user.url} ref={linkRef} type='text'   />
-              <button type="button" className="copy-link-button">
-                <span className="material-icons"  onClick={copyToClipboard}>{copySuccess ? <DoneIcon color='success' sx={{ fontSize: 30 }} /> : "Copy"}</span>
-              </button>
+                <div className='copy-link'>
+                  <input className='copy-link-input' value={user.url} ref={linkRef} type='text'   />
+                  <button type="button" className="copy-link-button">
+                    <span className="material-icons"  onClick={copyToClipboard}>{copySuccess ? <DoneIcon color='success' sx={{ fontSize: 30 }} /> : "Copy"}</span>
+                  </button>
+                </div>
+                <label style={{
+          fontFamily: 'Open-Sans-Bold',
+          fontSize: '20px',
+          marginTop: '25px',
+          textAlign: 'center'
+        }}>Wait until the opponent will join</label>
+              </div>
               
-            </div>
-            {player ? <input placeholder='Enter game link' onChange={(e) => handleInput(e)} /> : <span className='wait'>Wait until the opponent will join</span>}
-            {/* <input placeholder='Enter game link' onChange={(e) => handleInput(e)} /> */}
-          </div>
-        {loading ? <Load /> : <span className='btn' onClick={onCheck} ><span>Get a winnings</span></span>}
+              
+              </Typography>
+            }
+            {activeStep === 1 && 
+              <Typography sx={{ mt: 2, mb: 1 }}>
+                <div style={{
+                  padding:'15px',
+                  textAlign:'center'
+                }}>
+                  <h3>Now Play the match on Chess.com with your opponent</h3>
+                  <h3>When match will over enter a link of the match and get your winnings</h3>
+                </div>
+                
+              </Typography>
+            }
+            {activeStep === 2 && 
+              <Typography sx={{ mt: 2, mb: 1 }}>
+                <label style={{
+          fontFamily: 'Open-Sans-Bold',
+          textAlign: 'center'
+        }}>Enter the match link to get your winnings</label>
+                <div className='form1' >
+                  <input placeholder='Enter game link' onChange={(e) => handleInput(e)} />
+                </div>
+                {loading ? <Load /> : <span className='btn' onClick={onCheck} ><span>Get a winnings</span></span>}
+              </Typography>
+            }
+            {activeStep !== 2 && 
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:'80px' }}>
+                <Button
+                  color="inherit"
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  sx={{ mr: 1 }}
+                >
+                  Back
+                </Button>
+                <Box sx={{ flex: '1 1 auto' }} />
+                
+
+                <Button onClick={handleNext}>
+                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                </Button>
+            </Box>
+            }
+            <img className='chessBoard-back' src='assets/images/chess-board.png.png' alt='chess-board' />
+            <img className='wallet-3d' src='assets/images/wallet-3d.png' alt='wallet-3d' />
+            { notification && <Notification message={notification.message} icon={notification.icon} /> }
+          </React.Fragment>
+        )}
     </div>
-    <img className='chessBoard-back' src='assets/images/chess-board.png.png' alt='chess-board' />
-    <img className='wallet-3d' src='assets/images/wallet-3d.png' alt='wallet-3d' />
-    { notification && <Notification message={notification.message} icon={notification.icon} /> }
-    {/* {notification ? <Notification message={"dsds"} icon={false} /> : <div style={{width:'400px', height: '500px', backgroundColor: 'red'}}></div>} */}
+    
     </>
     
   )
+  
   return (
       <>
+      
       {winnerName ? <div className='app-container' style={{background: 'none'}}><Modal nick={winnerName} winner={winnerName === user.firstNick ? true : false} /> </div> : app()}
       </>
         
