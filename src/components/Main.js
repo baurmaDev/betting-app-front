@@ -16,7 +16,7 @@ function Main() {
   const [amount, setAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const contractAddress = '0x583BfFcff11067F1E3783153a6009290E384b828'
+  const contractAddress = '0x38Ec1CD975f53a65BC5f50Dd13736D91d1F510bD'
   const contractABI = abi.abi;
   let navigate = useNavigate();
 
