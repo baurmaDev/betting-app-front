@@ -6,6 +6,7 @@ import { Routes, Route, Link, BrowserRouter } from "react-router-dom";
 import Main from './components/Main';
 import Game from './components/Game';
 import Join from './components/Join';
+import Metamask from './components/Metamask';
 import Lobby from './components/Lobby';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -18,6 +19,7 @@ root.render(
         <Route path='/game' element={<Game />} />
         <Route path='/join/:roomID' element={<Join />} />
         <Route path='/lobby' element={<Lobby />} />
+        <Route path='/metamask' element={<Metamask />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

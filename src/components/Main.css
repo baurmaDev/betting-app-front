@@ -77,7 +77,7 @@
     border: 8px solid #fff;
     border-radius: 50%;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: rgb(10, 9, 9) transparent transparent transparent;
+    border-color: #9C7FE8 transparent transparent transparent;
     
 }
 
@@ -100,5 +100,14 @@
 
     100% {
         transform: rotate(360deg);
+    }
+}
+@media (max-width: 768px){
+    .chess-3d{
+        display: none;
+        
+    }
+    .chess-3d-back{
+        display: none;
     }
 }

@@ -18,7 +18,8 @@ function Join() {
   const [errorNick, setErrorNick] = useState('');
   const [roomId, setRoomId] = useState('');
   const [currentAccount, setCurrentAccount] = useState('');
-  const contractAddress = '0x38Ec1CD975f53a65BC5f50Dd13736D91d1F510bD';
+  // const contractAddress = '0x38Ec1CD975f53a65BC5f50Dd13736D91d1F510bD';
+  const contractAddress = "0x18388824B483D28CC0B85467f1F89d1b9c6bAa8E";
   const contractABI = abi.abi;
   
   let navigate = useNavigate();
@@ -86,7 +87,7 @@ function Join() {
                 setLoading(true);
                 await messageTxn.wait();
                 console.log("Betted!", secondSigner); 
-                axios.post(`${BASE_URL}/api/lobby/${roomID}`, {
+                axios.post(`${localhost}/api/lobby/${roomID}`, {
                     secondSigner,
                     secondNickname
                 }).then(response => {
@@ -130,7 +131,7 @@ function Join() {
     }
   }
   useEffect(() => {
-    axios.get(`${BASE_URL}/api/join/${roomID}`).then(response => {
+    axios.get(`${localhost}/api/join/${roomID}`).then(response => {
       setAmount(response.data.amount); 
     })
     setTimeout(() => {
@@ -156,7 +157,7 @@ function Join() {
             fontFamily: 'Open-Sans-Bold',
             fontSize: '16px',
             padding: '10px'
-          }}>Bet amount: {amount} MATIC</label>
+          }}>Bet amount: {amount} ETH</label>
                   {/* <p style={{color:'red'}}>{errorNick}</p> */}
               
           </div>

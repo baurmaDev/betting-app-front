@@ -16,7 +16,8 @@ function Main() {
   const [amount, setAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const contractAddress = '0x38Ec1CD975f53a65BC5f50Dd13736D91d1F510bD'
+  // const contractAddress = '0x38Ec1CD975f53a65BC5f50Dd13736D91d1F510bD'
+  const contractAddress = "0x18388824B483D28CC0B85467f1F89d1b9c6bAa8E";
   const contractABI = abi.abi;
   let navigate = useNavigate();
 
@@ -35,15 +36,17 @@ function Main() {
           const betContract = new ethers.Contract(contractAddress, contractABI, signer);
           const signerAddress = await signer.getAddress();
           console.log(signerAddress)
+          
+          const gasPrice = (await provider.getGasPrice()).toNumber() * 1.10;
+          console.log(gasPrice)
           const messageTxn = await betContract.setBet('Bet', {
-            value: ethers.utils.parseUnits(amount, "ether"),
-            gasLimit: ethers.utils.hexlify(80000)
+            value: ethers.utils.parseUnits(amount, "ether")
           });
           setLoading(true);
           await messageTxn.wait();
           console.log("Betted!");
           axios
-            .post(`${BASE_URL}/api/create-game`, {
+            .post(`${localhost}/api/create-game`, {
               signerAddress,
               nickname,
               // secondNickname,
@@ -97,11 +100,11 @@ function Main() {
           
           <input 
           placeholder='Enter amount of stake' name='currency-field' value={amount}
-          type='number' step='1' min='1' onChange={(e) => handleChange(e)}
+          type='number' step='0.001' min='0.001' onChange={(e) => handleChange(e)}
           />
           {potential !== 0 &&
             <div className='potential'>
-              Potential winnings: {potential} MATIC
+              Potential winnings: {potential} ETH
             </div>
           }
           

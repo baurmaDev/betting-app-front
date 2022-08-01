@@ -44,18 +44,18 @@ const Game = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   }
   const steps = ['step 1', 'step 2', 'step 3'];
-  const socket = io('https://chessbet.onrender.com',{
-    cors: {
-        origin: "https://chessbet.onrender.com",
-        credentials: true
-    }
-  , transports: ['websocket']});
-  // const socket = io('http://localhost:5000/',{
+  // const socket = io('https://chessbet.onrender.com',{
   //   cors: {
-  //       origin: "http://localhost:5000",
+  //       origin: "https://chessbet.onrender.com",
   //       credentials: true
   //   }
   // , transports: ['websocket']});
+  const socket = io('http://localhost:5000/',{
+    cors: {
+        origin: "http://localhost:5000",
+        credentials: true
+    }
+  , transports: ['websocket']});
   
   useEffect(() => {
     console.log("before socket emit")
@@ -94,7 +94,7 @@ const Game = () => {
   const onCheck = () => {
     console.log("Submitted!")
     const {roomId, firstNick, secondNick, firstAddress, secondAddress, betAmount, url} = user;
-    axios.get(`${BASE_URL}/api/join/${roomId}`).then(response => {
+    axios.get(`${localhost}/api/join/${roomId}`).then(response => {
         if(response.data.secondSigner){
           axios.get(`https://api.chess.com/pub/player/${firstNick}/games/archives`).then(response => {
             axios.get(`${response.data.archives[response.data.archives.length - 1]}`).then(response => {
@@ -115,7 +115,7 @@ const Game = () => {
                     const winner = firstAddress;
                     console.log(winner);
                     const amount = betAmount * 2;
-                    axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
+                    axios.post(`${localhost}/api/withdraw/${roomId}`, {
                       winner,
                       amount
                     }).then(response => {
@@ -135,7 +135,7 @@ const Game = () => {
                     setWinnerName(firstNick);
                     console.log(winner);
                     const amount = betAmount * 2;
-                    axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
+                    axios.post(`${localhost}/api/withdraw/${roomId}`, {
                       winner,
                       amount
                     }).then(response => {
@@ -153,7 +153,7 @@ const Game = () => {
                   const draw = true;
                   const amount = betAmount;
                   
-                  axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
+                  axios.post(`${localhost}/api/withdraw/${roomId}`, {
                       firstAddress,
                       secondAddress,
                       draw,
@@ -183,7 +183,7 @@ const Game = () => {
 
   useEffect(() =>  {
     
-      axios.get(`${BASE_URL}/api/join/${id}`).then(response => {
+      axios.get(`${localhost}/api/join/${id}`).then(response => {
         console.log("Get request!")
         const {_id,signerAddress, nickname, secondNickname,  amount,secondSigner} = response.data;
         setUser({

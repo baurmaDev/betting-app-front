@@ -1,6 +1,6 @@
 import './App.css';
 import {useState, useEffect} from 'react';
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 // import {chessFigure, hand, repeat, wallet} from './assets/images'
 import {isMobile} from 'react-device-detect';
 import { FiveGRounded } from '@mui/icons-material';
@@ -9,7 +9,7 @@ import { FiveGRounded } from '@mui/icons-material';
 
 
 function App() {
-
+  let navigate  = useNavigate();
   const [currentAccount, setCurrentAccount] = useState("");
   // const mobileConnect = async() => {
   //     const provider = new WalletConnectProvider({
@@ -24,11 +24,7 @@ function App() {
   // }
   const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
-    if (!ethereum) {
-      alert("Make sure you have metamask!");
-    } else {
-      console.log("We have the ethereum object", ethereum);
-    }
+    
 
     const accounts = await ethereum.request({ method: "eth_accounts" });
     if(accounts.length !== 0){
@@ -43,8 +39,7 @@ function App() {
       const { ethereum } = window;
 
       if (!ethereum) {
-        alert("Get MetaMask!");
-        return;
+        navigate("/metamask", {replace: true})
       }
 
       const accounts = await ethereum.request({ method: "eth_requestAccounts" });
