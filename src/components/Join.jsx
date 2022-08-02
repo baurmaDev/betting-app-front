@@ -87,7 +87,7 @@ function Join() {
                 setLoading(true);
                 await messageTxn.wait();
                 console.log("Betted!", secondSigner); 
-                axios.post(`${localhost}/api/lobby/${roomID}`, {
+                axios.post(`${BASE_URL}/api/lobby/${roomID}`, {
                     secondSigner,
                     secondNickname
                 }).then(response => {
@@ -131,7 +131,7 @@ function Join() {
     }
   }
   useEffect(() => {
-    axios.get(`${localhost}/api/join/${roomID}`).then(response => {
+    axios.get(`${BASE_URL}/api/join/${roomID}`).then(response => {
       setAmount(response.data.amount); 
     })
     setTimeout(() => {

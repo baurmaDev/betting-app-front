@@ -23,6 +23,7 @@ const ENDPOINT = 'chess-socket.onrender.com';
 
 const Game = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [noWinner, setNoWinner] = useState(false);
   const [loading, setLoading] = useState('');
   const [matchLink, setMatchLink] = useState('');
   const [winnerName, setWinnerName] = useState('');
@@ -44,18 +45,18 @@ const Game = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   }
   const steps = ['step 1', 'step 2', 'step 3'];
-  // const socket = io('https://chessbet.onrender.com',{
-  //   cors: {
-  //       origin: "https://chessbet.onrender.com",
-  //       credentials: true
-  //   }
-  // , transports: ['websocket']});
-  const socket = io('http://localhost:5000/',{
+  const socket = io('https://chessbet.onrender.com',{
     cors: {
-        origin: "http://localhost:5000",
+        origin: "https://chessbet.onrender.com",
         credentials: true
     }
   , transports: ['websocket']});
+  // const socket = io('http://localhost:5000/',{
+  //   cors: {
+  //       origin: "http://localhost:5000",
+  //       credentials: true
+  //   }
+  // , transports: ['websocket']});
   
   useEffect(() => {
     console.log("before socket emit")
@@ -70,6 +71,7 @@ const Game = () => {
         }
     })
     socket.on("roomData", ({ users }) => {
+            console.log("socket connection")
             const user = users[users.length - 1].name;
             if(user !== name){
               setActiveStep(1);
@@ -94,7 +96,7 @@ const Game = () => {
   const onCheck = () => {
     console.log("Submitted!")
     const {roomId, firstNick, secondNick, firstAddress, secondAddress, betAmount, url} = user;
-    axios.get(`${localhost}/api/join/${roomId}`).then(response => {
+    axios.get(`${BASE_URL}/api/join/${roomId}`).then(response => {
         if(response.data.secondSigner){
           axios.get(`https://api.chess.com/pub/player/${firstNick}/games/archives`).then(response => {
             axios.get(`${response.data.archives[response.data.archives.length - 1]}`).then(response => {
@@ -115,7 +117,7 @@ const Game = () => {
                     const winner = firstAddress;
                     console.log(winner);
                     const amount = betAmount * 2;
-                    axios.post(`${localhost}/api/withdraw/${roomId}`, {
+                    axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                       winner,
                       amount
                     }).then(response => {
@@ -135,7 +137,7 @@ const Game = () => {
                     setWinnerName(firstNick);
                     console.log(winner);
                     const amount = betAmount * 2;
-                    axios.post(`${localhost}/api/withdraw/${roomId}`, {
+                    axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                       winner,
                       amount
                     }).then(response => {
@@ -152,8 +154,8 @@ const Game = () => {
                   console.log("Draw detected!")
                   const draw = true;
                   const amount = betAmount;
-                  
-                  axios.post(`${localhost}/api/withdraw/${roomId}`, {
+                  setLoading(true);
+                  axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                       firstAddress,
                       secondAddress,
                       draw,
@@ -161,6 +163,8 @@ const Game = () => {
                     }).then(response => {
                       setLoading(false);
                       setErrorLink(response.data);
+                      setNoWinner(true);
+                      setNotification({message: response.data, icon: true});
                       console.log(response.data);
                     }).catch(err => {
                       console.log(err);
@@ -183,7 +187,7 @@ const Game = () => {
 
   useEffect(() =>  {
     
-      axios.get(`${localhost}/api/join/${id}`).then(response => {
+      axios.get(`${BASE_URL}/api/join/${id}`).then(response => {
         console.log("Get request!")
         const {_id,signerAddress, nickname, secondNickname,  amount,secondSigner} = response.data;
         setUser({
@@ -321,11 +325,16 @@ const Game = () => {
     </>
     
   )
+  const noDraw = () => (
+    <>
+      {winnerName ? <Modal nick={winnerName} winner={winnerName === user.firstNick ? true : false} betAmount={(user.betAmount * 2) - ((user.betAmount * 2) * 0.1)}  />  : app()}
+    </>
+  )
   
   return (
       <>
       
-      {winnerName ? <div className='app-container' style={{background: 'none'}}><Modal nick={winnerName} winner={winnerName === user.firstNick ? true : false} /> </div> : app()}
+      {noWinner ? <Modal draw={true} /> : noDraw()}
       </>
         
     

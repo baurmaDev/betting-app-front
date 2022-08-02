@@ -16,23 +16,24 @@ const Lobby = () => {
   const [loading,setLoading] = useState(false);
   const [errorLink, setErrorLink] = useState('');
   const [user, setUser] = useState({});
+  const [noWinner, setNoWinner] = useState(false);
 
   const {state} = useLocation();
   const {id, name} = state;
   
-  const socket = io('http://localhost:5000/',{
-    cors: {
-        origin: "http://localhost:5000",
-        credentials: true
-    }
-  , transports: ['websocket']});
-
-  // const socket = io('https://chessbet.onrender.com',{
+  // const socket = io('http://localhost:5000/',{
   //   cors: {
-  //       origin: "https://chessbet.onrender.com",
+  //       origin: "http://localhost:5000",
   //       credentials: true
   //   }
   // , transports: ['websocket']});
+
+  const socket = io('https://chessbet.onrender.com',{
+    cors: {
+        origin: "https://chessbet.onrender.com",
+        credentials: true
+    }
+  , transports: ['websocket']});
   
   useEffect(() => {
     console.log("before socket emit")
@@ -58,7 +59,7 @@ const Lobby = () => {
   const onCheck = () => {
     const {roomId, firstNick, secondNick, firstAddress, secondAddress, betAmount} = user;
 
-    axios.get(`${localhost}/api/join/${roomId}`).then(response => {
+    axios.get(`${BASE_URL}/api/join/${roomId}`).then(response => {
         if(response.data.secondSigner){
           axios.get(`https://api.chess.com/pub/player/${firstNick}/games/archives`).then(response => {
             axios.get(`${response.data.archives[response.data.archives.length - 1]}`).then(response => {
@@ -76,7 +77,7 @@ const Lobby = () => {
               const winner = secondAddress;
               const amount = betAmount * 2;
               setLoading(true);
-              axios.post(`${localhost}/api/withdraw/${roomId}`, {
+              axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                 winner,
                 amount
               }).then(response => {
@@ -96,7 +97,7 @@ const Lobby = () => {
               const winner = secondAddress;
               const amount = betAmount * 2;
               setLoading(true);
-              axios.post(`${localhost}/api/withdraw/${roomId}`, {
+              axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                 winner,
                 amount
               }).then(response => {
@@ -116,7 +117,7 @@ const Lobby = () => {
                   const amount = betAmount;
                   
                   setLoading(true);
-                  axios.post(`${localhost}/api/withdraw/${roomId}`, {
+                  axios.post(`${BASE_URL}/api/withdraw/${roomId}`, {
                       firstAddress,
                       secondAddress,
                       draw,
@@ -124,6 +125,7 @@ const Lobby = () => {
                     }).then(response => {
                       setLoading(false);
                       setErrorLink(response.data);
+                      setNoWinner(true);
                       console.log(response.data);
                     }).catch(err => {
                       console.log(err);
@@ -146,7 +148,7 @@ const Lobby = () => {
 
   useEffect(() =>  {
     setTimeout(() => {
-       axios.get(`${localhost}/api/join/${id}`).then(response => {
+       axios.get(`${BASE_URL}/api/join/${id}`).then(response => {
       const {_id, signerAddress, nickname, secondNickname,  amount, secondSigner} = response.data;
       setUser({
           firstAddress: signerAddress,
@@ -187,12 +189,17 @@ const Lobby = () => {
     
     
   )
+  const noDraw = () => (
+    <>
+       {winnerName ? <Modal nick={winnerName} winner={winnerName === user.secondNick ? true : false} betAmount={(user.betAmount * 2) - ((user.betAmount * 2) * 0.1)} draw={noWinner} />  : app()}
+
+    </>
+  )
 
   return (
     <>
     
-     {winnerName ? <div className='app-container' style={{background: 'none'}}><Modal nick={winnerName} winner={winnerName === user.secondNick ? true : false} /> </div> : app()}
-
+      {noWinner ? <Modal draw={true} /> : noDraw()}
     </>
   )
 }

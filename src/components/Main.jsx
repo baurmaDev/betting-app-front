@@ -9,6 +9,7 @@ import Load from './Load';
 import { BASE_URL } from './api';
 import { localhost } from './localhost';
 import Notification from './Notification'
+import Modal from './Modal';
 
 function Main() {
   const [nickname, setNickname] = useState('');
@@ -46,7 +47,7 @@ function Main() {
           await messageTxn.wait();
           console.log("Betted!");
           axios
-            .post(`${localhost}/api/create-game`, {
+            .post(`${BASE_URL}/api/create-game`, {
               signerAddress,
               nickname,
               // secondNickname,
