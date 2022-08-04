@@ -300,7 +300,7 @@ const Game = () => {
               </Typography>
             }
             {activeStep !== 2 && 
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:`${isMobile ? '60px' : '80px'}` }}>
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:`${isMobile ? '20px' : '80px'}` }}>
                 <Button
                   color="inherit"
                   disabled={activeStep === 0}
@@ -317,8 +317,12 @@ const Game = () => {
                 </Button>
             </Box>
             }
-            <img className='chessBoard-back' src='assets/images/chess-board.png.png' alt='chess-board' />
+            {!isMobile && 
+            <>
+              <img className='chessBoard-back' src='assets/images/chess-board.png.png' alt='chess-board' />
             <img className='wallet-3d' src='assets/images/wallet-3d.png' alt='wallet-3d' />
+            </>}
+            
             { notification && <Notification message={notification.message} icon={notification.icon} /> }
           </React.Fragment>
         )}
