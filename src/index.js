@@ -8,6 +8,7 @@ import Game from './components/Game';
 import Join from './components/Join';
 import Metamask from './components/Metamask';
 import Lobby from './components/Lobby';
+import MetamaskMobile from './components/MetamaskMobile'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,6 +21,7 @@ root.render(
         <Route path='/join/:roomID' element={<Join />} />
         <Route path='/lobby' element={<Lobby />} />
         <Route path='/metamask' element={<Metamask />} />
+        <Route path='/metamask-mb' element={<MetamaskMobile />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

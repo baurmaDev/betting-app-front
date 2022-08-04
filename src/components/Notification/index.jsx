@@ -9,7 +9,7 @@ const Index = ({message, icon}) => {
   console.log("Modal opened", {message, icon})
   const [close, setClose] = useState(false);
   useEffect(() => {
-    setTimeout(() => setClose(!close), 5000);
+    if(icon != true) setTimeout(() => setClose(!close), 5000);
   }, [])  
   return (
     <div className='notification-container' style={{

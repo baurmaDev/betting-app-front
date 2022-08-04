@@ -103,29 +103,12 @@ body, html {
 }
 
 
-/* .app-label{
-  display: flex;
-  justify-content: space-between;
-} */
-/* .app-label img{
-  width: 40px;
-  height: 40px;
-  object-fit:fill;
+@media (max-width: 768px) {
+  .container{
+    padding: 0;
+    width: 90%;
+  }
+  .app-button{
+    width: 373px;
+  }
 }
-.label-text{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #FFFFFF;
-  justify-content: center;
-  font-family: "Roboto";
-}
-.app-label button{
-  background-color: #4caf50;
-  border: none;
-  border-radius: 5%;
-  color:#FFFFFF;
-  font-family: "Roboto" sans-serif;
-  cursor:pointer;
-} */
-

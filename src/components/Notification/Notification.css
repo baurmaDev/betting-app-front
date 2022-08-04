@@ -13,6 +13,24 @@
         /*animation: animation-name animation-duration animation-direction animation-iteration-count */
         transition: .5s ease;
 }
+@media (max-width: 768px){
+    .notification-container{
+        left:60px;
+        top: 15px;
+        animation: slide-mb 1s linear;
+            transition: .5s ease;
+        
+    }
+        @keyframes slide-mb {
+            0% {
+                transform: translateY(-30px);
+            }
+    
+            100% {
+                transform: translateY(10px);
+            }
+        }
+}
 .notification-header{
     display: flex;
     justify-content:end; 

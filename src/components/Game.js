@@ -16,6 +16,8 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import {isMobile} from 'react-device-detect';
+
 
 
 const ENDPOINT = 'chess-socket.onrender.com';
@@ -298,7 +300,7 @@ const Game = () => {
               </Typography>
             }
             {activeStep !== 2 && 
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:'80px' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:`${isMobile ? '60px' : '80px'}` }}>
                 <Button
                   color="inherit"
                   disabled={activeStep === 0}
@@ -333,7 +335,6 @@ const Game = () => {
   
   return (
       <>
-      
       {noWinner ? <Modal draw={true} /> : noDraw()}
       </>
         

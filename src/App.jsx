@@ -39,6 +39,7 @@ function App() {
       const { ethereum } = window;
 
       if (!ethereum) {
+        isMobile ? navigate("/metamask-mb", {replace:true}) :
         navigate("/metamask", {replace: true})
       }
 
@@ -53,8 +54,41 @@ function App() {
      return <Navigate to="/main" replace={true} />;
     }
   }
-
-  const check = () => {
+  const mobile = () => {
+    if(!currentAccount){
+      return(
+      <div className="App">
+        <div className="container">
+          <div className="header">
+            <h1>ChessBet</h1>
+          </div>
+          <div className="main">
+            <div className="left-side">
+              <div className="big-text">
+                <div className='text-container'>
+                  <div className="text"><img className='wallet-icon' src='assets/images/wallet.png' alt='wallet' /> <span className="wallet-icon-text">Bet </span></div>
+                  <div className="text"><img src='assets/images/chess-figure.png' alt='chess-figure' /><span className="chess-figure-icon-text">Play</span></div>
+                  <div className="text"><img className='hand' src='assets/images/hand-ether.png' alt='hand-ether' /><span className="hand-icon-text">Earn</span></div>
+                  <div className="text"><img src='assets/images/repeat.png' alt='repeat' /><span className="repeat-icon-text">Repeat</span></div>
+                </div>
+              </div>
+              <div className="description">
+                <p>Bet Ether, Play on <b>Chess.com with opponent</b><br /> and Earn  crypto on the decentralized betting platform</p>
+              </div>
+              <button className='app-button' onClick={connectWallet}>Play Now</button>
+            </div>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      )
+    }else{
+      return <Navigate to="/main" replace={true} />
+    }
+  }
+  const desktopVersion = () => {
     if(!currentAccount){
       return(
       <div className="App">
@@ -105,7 +139,8 @@ function App() {
   }, [])
 
   return (
-    check()
+    <>{isMobile ? mobile() : desktopVersion()}</>
+    
   );
 }
 

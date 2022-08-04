@@ -52,20 +52,28 @@ const Index = () => {
             }
             {activeStep === 1 && 
               <Typography sx={{ mt: 2, mb: 1 }}>
-                <ul style={{marginBottom: '245px'}}>
-                    <li><a href='https://user-images.githubusercontent.com/1380529/46949169-c6881b00-d080-11e8-9563-4006ac8aeab6.png' target="_blank" rel='noreferrer' >Switch to Rinkeby Test Network</a></li>
+                <ul style={{marginBottom: '100px'}}>
+                    <li>Enter to Metamask App and Open the Menu</li>
+                    <li>Click to Settings section</li>
+                    <li>Select Networks</li>
+                    <li>Tap to Rinkeby Test Network and  Add Network</li>
                                       
                 </ul>
               </Typography>
             }
             {activeStep === 2 && 
               <Typography sx={{ mt: 2, mb: 1 }}>
-                <ul style={{marginBottom: `${isMobile ? '175px' : '200px'}`}}>
+                <ul style={{marginBottom: '20px'}}>
                     
                     <li>Copy your wallet address</li>
                     <li>Enter your wallet address here: <a href="https://rinkebyfaucet.com/">Rinkeby Faucet</a></li>
                     <li>Then you will get 0.1 ETH for test</li>
-                </ul>
+                    <br />
+                    <div>Now to use our App</div>
+                    <li>Open the menu in Metamask App</li>
+                    <li>Click to Browser</li>
+                    <li>Enter the follow link: https://chessbet.vercel.app/ </li>
+              </ul>
               </Typography>
             }
             
