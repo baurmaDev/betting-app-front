@@ -16,7 +16,7 @@ const Index = () => {
     let navigate = useNavigate();
     const handleNext = () => {
         if(activeStep === 2){
-            navigate("/", {replace: true})
+          navigate("/", {replace: true})
         }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
@@ -52,12 +52,8 @@ const Index = () => {
             }
             {activeStep === 1 && 
               <Typography sx={{ mt: 2, mb: 1 }}>
-                <ul style={{marginBottom: '100px'}}>
-                    <li>Enter to Metamask App and Open the Menu</li>
-                    <li>Click to Settings section</li>
-                    <li>Select Networks</li>
-                    <li>Tap to Rinkeby Test Network and  Add Network</li>
-                                      
+                <ul style={{marginBottom: '-20px'}}>
+                    <img src="/assets/images/screen-mt.jpeg " style={{width: '200px', height: '300px', borderRadius: '15px', marginRight: '30px'}} />          
                 </ul>
               </Typography>
             }
@@ -66,7 +62,7 @@ const Index = () => {
                 <ul style={{marginBottom: '20px'}}>
                     
                     <li>Copy your wallet address</li>
-                    <li>Enter your wallet address here: <a href="https://rinkebyfaucet.com/">Rinkeby Faucet</a></li>
+                    <li>Enter your wallet address here: <a href="https://rinkebyfaucet.com/"target="_blank" rel='noreferrer' >Rinkeby Faucet</a></li>
                     <li>Then you will get 0.1 ETH for test</li>
                     <br />
                     <div>Now to use our App</div>

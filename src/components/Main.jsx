@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+
 import axios from 'axios'
 import { ethers } from "ethers";
 import './Main.css';
@@ -17,13 +18,15 @@ function Main() {
   const [amount, setAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  // const contractAddress = '0x38Ec1CD975f53a65BC5f50Dd13736D91d1F510bD'
   const contractAddress = "0x18388824B483D28CC0B85467f1F89d1b9c6bAa8E";
   const contractABI = abi.abi;
   let navigate = useNavigate();
+  useEffect(() => {
+    const {ethereum} = window;
 
-  
-  
+    ethereum.on('chainChanged', (_chainId) => {console.log(_chainId); window.location.reload()});
+    
+  },[])
   const sendBet = async () => {
     console.log(amount);
   
@@ -31,6 +34,8 @@ function Main() {
         const {ethereum} = window;
 
         if(ethereum){
+          ethereum.on('chainChanged', (chainId) => {console.log(chainId)});
+
           console.log("Process started!")
           const provider = new ethers.providers.Web3Provider(ethereum);
           const signer = provider.getSigner();
@@ -40,26 +45,31 @@ function Main() {
           
           const gasPrice = (await provider.getGasPrice()).toNumber() * 1.10;
           console.log(gasPrice)
-          const messageTxn = await betContract.setBet('Bet', {
-            value: ethers.utils.parseUnits(amount, "ether")
-          });
-          setLoading(true);
-          await messageTxn.wait();
-          console.log("Betted!");
-          axios
-            .post(`${BASE_URL}/api/create-game`, {
-              signerAddress,
-              nickname,
-              // secondNickname,
-              // link,
-              amount
-            })  
-            .then((response) => {
-              console.log(response.data);
-              navigate("/game", { replace: true, state: {id: response.data.id, name: nickname} });
-            }).catch(error => {
-              console.log(error)
+          try{
+            const messageTxn = await betContract.setBet('Bet', {
+              value: ethers.utils.parseUnits(amount, "ether")
             });
+            setLoading(true);
+            await messageTxn.wait();
+            console.log("Betted!");
+            axios
+              .post(`${BASE_URL}/api/create-game`, {
+                signerAddress,
+                nickname,
+                amount
+              })  
+              .then((response) => {
+                console.log(response.data);
+                navigate("/game", { replace: true, state: {id: response.data.id, name: nickname} });
+              }).catch(error => {
+                console.log(error)
+              });
+          }catch(err){
+            if(err.error.code === -32603) alert("Your balance is not enough");
+            if(err.error.code === -32000) alert("Estimation of gas, try lesser bet amount");
+          }
+          
+          
         } 
       }catch(error){
         console.log(error);
@@ -105,7 +115,7 @@ function Main() {
           />
           {potential !== 0 &&
             <div className='potential'>
-              Potential winnings: {potential} ETH
+              Potential winnings: {String(potential).length > 6 ? String(potential).substr(0,6) : potential} ETH
             </div>
           }
           

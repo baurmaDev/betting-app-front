@@ -16,6 +16,7 @@
     "@walletconnect/web3-provider": "^1.7.8",
     "axios": "^0.27.2",
     "chess-web-api": "^1.1.2",
+    "eth-rpc-errors": "^3.0.0",
     "ethers": "^5.6.9",
     "react": "^18.2.0",
     "react-device-detect": "^2.2.2",

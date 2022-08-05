@@ -79,29 +79,33 @@ function Join() {
                 const signer = provider.getSigner();
                 const betContract = new ethers.Contract(contractAddress, contractABI, signer);
                 const secondSigner = await signer.getAddress();
-
-                const messageTxn = await betContract.setBet('Bet', {
-                  value: ethers.utils.parseUnits(amount, "ether"),
-                  gasLimit: ethers.utils.hexlify(200000)
-                });
-                setLoading(true);
-                await messageTxn.wait();
-                console.log("Betted!", secondSigner); 
-                axios.post(`${BASE_URL}/api/lobby/${roomID}`, {
-                    secondSigner,
-                    secondNickname
-                }).then(response => {
-                    console.log(response);
-                }).catch(err => {
-                    console.log(err)
-                })
-                navigate("/lobby", {
-                  replace: true,
-                  state: {
-                    id: roomID,
-                    name: secondNickname
-                  }
-                })
+                try{
+                  const messageTxn = await betContract.setBet('Bet', {
+                    value: ethers.utils.parseUnits(amount, "ether"),
+                    gasLimit: ethers.utils.hexlify(200000)
+                  });
+                  setLoading(true);
+                  await messageTxn.wait();
+                  console.log("Betted!", secondSigner); 
+                  axios.post(`${BASE_URL}/api/lobby/${roomID}`, {
+                      secondSigner,
+                      secondNickname
+                  }).then(response => {
+                      console.log(response);
+                  }).catch(err => {
+                      console.log(err)
+                  })
+                  navigate("/lobby", {
+                    replace: true,
+                    state: {
+                      id: roomID,
+                      name: secondNickname
+                    }
+                  })
+                }catch(err){
+                  if(err.error.code === -32603) alert("Your balance is not enough");
+                }
+                
                 
             } 
         }catch(error){

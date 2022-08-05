@@ -39,6 +39,7 @@ const Game = () => {
   const {id, name} = state;
   const [player, setPlayer] = useState('');
   const linkRef = useRef(null);
+  const [disabled, setDisabled] = useState(true);
   
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -78,10 +79,11 @@ const Game = () => {
             if(user !== name){
               setActiveStep(1);
               setPlayer(user);
+              setDisabled(false);
               setNotification({message:`${user} has joined` , icon: true})
               setNotificationHandler(!setNotificationHandler);
                 localStorage.setItem('joined', JSON.stringify(true));
-
+              
               // alert(`${users[users.length - 1].name} has joined!`)
             }
             console.log(users);
@@ -226,7 +228,7 @@ const Game = () => {
   // }, [notification])
   useEffect(() => {
     console.log(notification ? 'true' : 'false')
-    setTimeout(() => setNotification(), 5000);
+    setTimeout(() => setNotification(), 1000);
   }, [notificationHandler])
   const app = () => (
     <>
@@ -299,24 +301,25 @@ const Game = () => {
                 {loading ? <Load /> : <span className='btn' onClick={onCheck} ><span>Get a winnings</span></span>}
               </Typography>
             }
-            {activeStep !== 2 && 
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:`${isMobile ? '20px' : '80px'}` }}>
+            
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:`${isMobile ? '20px' : '60px'}`, }}>
                 <Button
                   color="inherit"
                   disabled={activeStep === 0}
                   onClick={handleBack}
                   sx={{ mr: 1 }}
+                  
                 >
                   Back
                 </Button>
                 <Box sx={{ flex: '1 1 auto' }} />
                 
-
-                <Button onClick={handleNext}>
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
+                {activeStep !== 2 && <Button onClick={handleNext} disabled={disabled}>
+                  Next
+                </Button>}
+                
             </Box>
-            }
+            
             {!isMobile && 
             <>
               <img className='chessBoard-back' src='assets/images/chess-board.png.png' alt='chess-board' />
