@@ -7,7 +7,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import Load from './Load';
 import { BASE_URL } from './api';
 import { localhost } from './localhost';
-import Notification from './Notification'
+import Notification from './Notification';
+import {isMobile} from 'react-device-detect';
+
 
 
 
@@ -30,7 +32,8 @@ function Join() {
     try{
       const { ethereum } = window;
       if (!ethereum) {
-        alert("Make sure you have metamask!");
+        isMobile ? navigate("/metamask-mb", {replace:true}) :
+        navigate("/metamask", {replace: true})
       } else {
         console.log("We have the ethereum object", ethereum);
       }
@@ -54,8 +57,8 @@ function Join() {
       const { ethereum } = window;
 
       if (!ethereum) {
-        alert("Get MetaMask!");
-        return;
+        isMobile ? navigate("/metamask-mb", {replace:true}) :
+        navigate("/metamask", {replace: true})
       }
 
       const accounts = await ethereum.request({ method: "eth_requestAccounts" });

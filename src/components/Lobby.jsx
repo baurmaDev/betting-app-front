@@ -6,6 +6,7 @@ import Load from './Load';
 import Modal from './Modal';
 import { BASE_URL } from './api';
 import { localhost } from './localhost';
+import {isMobile} from 'react-device-detect';
 
 const ENDPOINT = 'localhost:5000';
 
@@ -183,8 +184,11 @@ const Lobby = () => {
         </div>
           
       </div>
-      <img className='chessBoard-back' src='assets/images/chess-board.png.png' alt='chess-board' />
-      <img className='wallet-3d' src='assets/images/wallet-3d.png' alt='wallet-3d' />
+      {!isMobile && 
+            <>
+              <img className='chessBoard-back' src='assets/images/chess-board.png.png' alt='chess-board' />
+            <img className='wallet-3d' src='assets/images/wallet-3d.png' alt='wallet-3d' />
+            </>}
     </>
     
     
