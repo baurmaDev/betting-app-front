@@ -325,7 +325,6 @@ const Game = () => {
               <img className='chessBoard-back' src='assets/images/chess-board.png.png' alt='chess-board' />
             <img className='wallet-3d' src='assets/images/wallet-3d.png' alt='wallet-3d' />
             </>}
-            
             { notification && <Notification message={notification.message} icon={notification.icon} /> }
           </React.Fragment>
         )}
